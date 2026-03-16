@@ -54,6 +54,22 @@ const shimmer = keyframes`
     0%   { background-position: -200% center; }
     100% { background-position: 200% center; }
 `
+const borderTop = keyframes`
+    from { background-position: 0 0; }
+    to   { background-position: 512px 0; }
+`
+const borderRight = keyframes`
+    from { background-position: 0 0; }
+    to   { background-position: 0 512px; }
+`
+const borderBottom = keyframes`
+    from { background-position: 0 0; }
+    to   { background-position: -512px 0; }
+`
+const borderLeft = keyframes`
+    from { background-position: 0 0; }
+    to   { background-position: 0 -512px; }
+`
 
 const features = [
     { title: 'Книги', desc: 'Учебники, словари, классика в оригинале', emoji: '🏛️', label: 'Bibliothēkē' },
@@ -351,34 +367,34 @@ const HomePage = () => {
                                             '&:hover': { bgcolor: '#1B3A6A', boxShadow: '0 4px 24px rgba(201,168,76,0.3)' },
                                         }}
                                     >
-                                        {/* Меандр сверху — анимация слева направо */}
+                                        {/* Меандр СВЕРХУ */}
                                         <Box sx={{
-                                            position: 'absolute', top: 0, left: 0, right: 0, height: '10px',
-                                            overflow: 'hidden',
-                                        }}>
-                                            <Box sx={{
-                                                height: '10px',
-                                                width: '200%',
-                                                backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='10' viewBox='0 0 40 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 5 h5 v-5 h10 v10 h-5 v-5 h-5 M20 5 h5 v-5 h10 v10 h-5 v-5 h-5' fill='none' stroke='%23C9A84C' stroke-width='1.5'/%3E%3C/svg%3E")`,
-                                                backgroundRepeat: 'repeat-x',
-                                                backgroundSize: '40px 10px',
-                                                animation: `${marquee} 6s linear infinite`,
-                                            }} />
-                                        </Box>
-                                        {/* Меандр снизу — анимация справа налево */}
+                                            position: 'absolute', top: 0, left: 0, right: 0, height: '8px',
+                                            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='14' viewBox='0 0 40 14'%3E%3Crect x='0' y='0' width='14' height='2' fill='%23C9A84C'/%3E%3Crect x='0' y='0' width='2' height='14' fill='%23C9A84C'/%3E%3Crect x='0' y='12' width='10' height='2' fill='%23C9A84C'/%3E%3Crect x='8' y='4' width='2' height='10' fill='%23C9A84C'/%3E%3Crect x='4' y='4' width='6' height='2' fill='%23C9A84C'/%3E%3Crect x='4' y='4' width='2' height='6' fill='%23C9A84C'/%3E%3Crect x='12' y='6' width='8' height='2' fill='%23C9A84C'/%3E%3Crect x='20' y='0' width='14' height='2' fill='%23C9A84C'/%3E%3Crect x='20' y='0' width='2' height='14' fill='%23C9A84C'/%3E%3Crect x='20' y='12' width='10' height='2' fill='%23C9A84C'/%3E%3Crect x='28' y='4' width='2' height='10' fill='%23C9A84C'/%3E%3Crect x='24' y='4' width='6' height='2' fill='%23C9A84C'/%3E%3Crect x='24' y='4' width='2' height='6' fill='%23C9A84C'/%3E%3Crect x='32' y='6' width='8' height='2' fill='%23C9A84C'/%3E%3C/svg%3E")`,
+                                            backgroundRepeat: 'repeat-x',
+                                            backgroundSize: '20px 8px',
+                                        }} />
+                                        {/* Меандр СНИЗУ */}
                                         <Box sx={{
-                                            position: 'absolute', bottom: 0, left: 0, right: 0, height: '10px',
-                                            overflow: 'hidden',
-                                        }}>
-                                            <Box sx={{
-                                                height: '10px',
-                                                width: '200%',
-                                                backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='10' viewBox='0 0 40 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 5 h5 v-5 h10 v10 h-5 v-5 h-5 M20 5 h5 v-5 h10 v10 h-5 v-5 h-5' fill='none' stroke='%23C9A84C' stroke-width='1.5'/%3E%3C/svg%3E")`,
-                                                backgroundRepeat: 'repeat-x',
-                                                backgroundSize: '40px 10px',
-                                                animation: `${marquee} 6s linear infinite reverse`,
-                                            }} />
-                                        </Box>
+                                            position: 'absolute', bottom: 0, left: 0, right: 0, height: '8px',
+                                            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='14' viewBox='0 0 40 14'%3E%3Crect x='0' y='12' width='14' height='2' fill='%23C9A84C'/%3E%3Crect x='0' y='0' width='2' height='14' fill='%23C9A84C'/%3E%3Crect x='0' y='0' width='10' height='2' fill='%23C9A84C'/%3E%3Crect x='8' y='0' width='2' height='10' fill='%23C9A84C'/%3E%3Crect x='4' y='8' width='6' height='2' fill='%23C9A84C'/%3E%3Crect x='4' y='4' width='2' height='6' fill='%23C9A84C'/%3E%3Crect x='12' y='6' width='8' height='2' fill='%23C9A84C'/%3E%3Crect x='20' y='12' width='14' height='2' fill='%23C9A84C'/%3E%3Crect x='20' y='0' width='2' height='14' fill='%23C9A84C'/%3E%3Crect x='20' y='0' width='10' height='2' fill='%23C9A84C'/%3E%3Crect x='28' y='0' width='2' height='10' fill='%23C9A84C'/%3E%3Crect x='24' y='8' width='6' height='2' fill='%23C9A84C'/%3E%3Crect x='24' y='4' width='2' height='6' fill='%23C9A84C'/%3E%3Crect x='32' y='6' width='8' height='2' fill='%23C9A84C'/%3E%3C/svg%3E")`,
+                                            backgroundRepeat: 'repeat-x',
+                                            backgroundSize: '20px 8px',
+                                        }} />
+                                        {/* Меандр СЛЕВА */}
+                                        <Box sx={{
+                                            position: 'absolute', left: 0, top: 0, bottom: 0, width: '8px',
+                                            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='40' viewBox='0 0 14 40'%3E%3Crect x='0' y='0' width='2' height='14' fill='%23C9A84C'/%3E%3Crect x='0' y='0' width='14' height='2' fill='%23C9A84C'/%3E%3Crect x='12' y='0' width='2' height='10' fill='%23C9A84C'/%3E%3Crect x='4' y='8' width='10' height='2' fill='%23C9A84C'/%3E%3Crect x='4' y='4' width='2' height='6' fill='%23C9A84C'/%3E%3Crect x='4' y='4' width='6' height='2' fill='%23C9A84C'/%3E%3Crect x='6' y='12' width='2' height='8' fill='%23C9A84C'/%3E%3Crect x='0' y='20' width='2' height='14' fill='%23C9A84C'/%3E%3Crect x='0' y='20' width='14' height='2' fill='%23C9A84C'/%3E%3Crect x='12' y='20' width='2' height='10' fill='%23C9A84C'/%3E%3Crect x='4' y='28' width='10' height='2' fill='%23C9A84C'/%3E%3Crect x='4' y='24' width='2' height='6' fill='%23C9A84C'/%3E%3Crect x='4' y='24' width='6' height='2' fill='%23C9A84C'/%3E%3Crect x='6' y='32' width='2' height='8' fill='%23C9A84C'/%3E%3C/svg%3E")`,
+                                            backgroundRepeat: 'repeat-y',
+                                            backgroundSize: '8px 20px',
+                                        }} />
+                                        {/* Меандр СПРАВА */}
+                                        <Box sx={{
+                                            position: 'absolute', right: 0, top: 0, bottom: 0, width: '8px',
+                                            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='40' viewBox='0 0 14 40'%3E%3Crect x='0' y='0' width='2' height='14' fill='%23C9A84C'/%3E%3Crect x='0' y='0' width='14' height='2' fill='%23C9A84C'/%3E%3Crect x='12' y='0' width='2' height='10' fill='%23C9A84C'/%3E%3Crect x='4' y='8' width='10' height='2' fill='%23C9A84C'/%3E%3Crect x='4' y='4' width='2' height='6' fill='%23C9A84C'/%3E%3Crect x='4' y='4' width='6' height='2' fill='%23C9A84C'/%3E%3Crect x='6' y='12' width='2' height='8' fill='%23C9A84C'/%3E%3Crect x='0' y='20' width='2' height='14' fill='%23C9A84C'/%3E%3Crect x='0' y='20' width='14' height='2' fill='%23C9A84C'/%3E%3Crect x='12' y='20' width='2' height='10' fill='%23C9A84C'/%3E%3Crect x='4' y='28' width='10' height='2' fill='%23C9A84C'/%3E%3Crect x='4' y='24' width='2' height='6' fill='%23C9A84C'/%3E%3Crect x='4' y='24' width='6' height='2' fill='%23C9A84C'/%3E%3Crect x='6' y='32' width='2' height='8' fill='%23C9A84C'/%3E%3C/svg%3E")`,
+                                            backgroundRepeat: 'repeat-y',
+                                            backgroundSize: '8px 20px',
+                                        }} />
                                         {/* Текст */}
                                         <Box sx={{ textAlign: 'center', px: 1, py: 0.5 }}>
                                             <Typography sx={{
