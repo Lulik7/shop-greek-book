@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Typography, Button, Container, Grid, Card, CardContent } from '@mui/material'
+import { Box, Typography, Button, Container, Grid, Card, CardContent, Dialog, DialogContent, IconButton } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { keyframes } from '@mui/system'
 import GreekBook from '../components/GreekBook'
@@ -50,11 +50,22 @@ const fadeInBranchRight = keyframes`
     from { opacity: 0; transform: scaleX(-1) rotate(-2deg) translateY(12px); }
     to   { opacity: 1; transform: scaleX(-1) rotate(-2deg) translateY(0px); }
 `
+const shimmer = keyframes`
+    0%   { background-position: -200% center; }
+    100% { background-position: 200% center; }
+`
 
 const features = [
-    { title: 'Курсы',    desc: 'От алфавита до свободного чтения Гомера', emoji: '📚', label: 'Mathēmata' },
-    { title: 'Книги',    desc: 'Учебники, словари, классика в оригинале',  emoji: '🏛️', label: 'Bibliothēkē' },
-    { title: 'Культура', desc: 'Мифология, история, философия Греции',     emoji: '🌿', label: 'Mousikē' },
+    { title: 'Книги', desc: 'Учебники, словари, классика в оригинале', emoji: '🏛️', label: 'Bibliothēkē' },
+]
+
+const bookPages = [
+    '/assets/page1.jpeg',
+    '/assets/page2.jpeg',
+    '/assets/page3.jpeg',
+    '/assets/page4.jpeg',
+    '/assets/page5.jpeg',
+    '/assets/page6.jpeg',
 ]
 
 const testimonials = [
@@ -65,7 +76,21 @@ const testimonials = [
 
 const meanderPattern = `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 10 h10 v-10 h20 v20 h-10 v10 h-20 v-20 h10' fill='none' stroke='%23C9A84C' stroke-width='1.5' opacity='0.3'/%3E%3C/svg%3E")`
 
-// ─── Компонент заголовка с эффектом пера ──────────────────────────────────
+const courseDescription: Array<{ caps?: string; rest: string } | string> = [
+    'Вы точно сможете выучить греческий язык.',
+    { caps: 'С ЧЕГО НАЧИНАЕМ:', rest: ' с нуля.' },
+    { caps: 'К ЧЕМУ ПРИХОДИМ:', rest: ' уровень базового знания греческого языка.' },
+    { caps: 'ЗАНЯТИЯ:', rest: ' самостоятельно, в любое удобное время.' },
+    { caps: 'СКОЛЬКО ВРЕМЕНИ НУЖНО:', rest: ' 45 дней, по 30 мин. - 1,5 часа в день.' },
+    'Четкий план работы и конкретные задания на каждый день. Домашка и проверка. Постоянная поддержка преподавателя, обратная связь.',
+    { caps: 'СТОИМОСТЬ:', rest: ' 30 евро.' },
+    'Курс греческого языка для начинающих с нуля и продолжающих (уровни А1+А2), 45 лекций для самостоятельных занятий с видео- и аудио-материалами, домашними заданиями и ответами, обратная связь с учителем. Над ним можно работать полностью самостоятельно, в любое удобное время и в любом темпе, даже с полного нуля. Учимся читать, писать, говорить и понимать по-гречески!',
+    '«Греческий за 45 дней» — это ПОШАГОВОЕ пособие, которое плавно перемещает вас от начала (А0), когда у вас совсем нет никаких знаний греческого языка, к полусреднему уровню (А2), когда вы уже будете знать все главные грамматические темы, иметь серьёзный запас лексики, понимать на слух долгие диалоги, писать разнообразные предложения и тексты, и, конечно же, разговаривать. Курс учитывает все аспекты, необходимые для грамотного самостоятельного освоения языка.',
+    'В каждой лекции – всего их 45 — формируется цель дня, даётся план выполнения и материалы для занятия; есть домашние задания и ключи к ним. Если у вас возник вопрос – немедленно обращайтесь ко мне (контакты даны в конце книги)!',
+    'Присутствуют ссылки на видео- и аудио-ресурсы. Все ссылки представлены также в форме QR-кодов, удобных для считывания мобильным устройством.',
+    'Курс рассчитан на взрослых русскоязычных учеников, но подойдёт и детям с 11 лет.',
+]
+
 const HandwrittenTitle = ({ children, color, delay = 0, italic = false }: {
     children: React.ReactNode
     color: string
@@ -168,12 +193,122 @@ const GreekQuotesMarquee = () => {
     )
 }
 
+const HeroVideo = () => {
+    const videoRef = React.useRef<HTMLVideoElement>(null)
+    const [hovered, setHovered] = React.useState(false)
+
+    const handleEnter = () => {
+        setHovered(true)
+        const v = videoRef.current
+        if (!v) return
+        v.muted = false
+        v.currentTime = 0
+        v.play().catch(() => {})
+    }
+
+    const handleLeave = () => {
+        setHovered(false)
+        if (videoRef.current) {
+            videoRef.current.pause()
+            videoRef.current.currentTime = 0
+            videoRef.current.muted = true
+        }
+    }
+
+    return (
+        <Box
+            onMouseEnter={handleEnter}
+            onMouseLeave={handleLeave}
+            sx={{
+                position: 'absolute',
+                left: { xs: '50%', md: '57%' },
+                top: '50%',
+                transform: 'translate(-50%, -50%)',
+                zIndex: 20,
+                width: { xs: 240, md: 320, lg: 400 },
+                cursor: 'pointer',
+            }}
+        >
+            {/* Смайлик "наведи мышку" */}
+            <Box sx={{
+                position: 'absolute',
+                bottom: -3,
+                left: 'calc(50% + 8px)',
+                transform: 'translateX(-50%)',
+                zIndex: 4,
+                pointerEvents: 'none',
+                whiteSpace: 'nowrap',
+                opacity: hovered ? 0 : 1,
+                transition: 'opacity 0.3s ease',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '4px',
+            }}>
+                <Typography sx={{ fontSize: '2rem', lineHeight: 1, animation: `${slideUp} 1s ease infinite alternate` }}>
+                    ❤️
+                </Typography>
+                <Typography sx={{
+                    fontFamily: '"Cinzel", serif',
+                    fontSize: '0.8rem',
+                    letterSpacing: '0.12em',
+                    color: '#0B1F3A',
+                    textTransform: 'uppercase',
+                    fontWeight: 700,
+                    background: 'rgba(248,245,238,0.92)',
+                    px: 1.5, py: 0.5,
+                    borderRadius: '4px',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
+                }}>наведи мышку</Typography>
+            </Box>
+
+            {/* Первый кадр видео — всегда виден как постер */}
+            {/* Само видео — стоит пока не навели */}
+            <Box
+                ref={videoRef}
+                component="video"
+                loop
+                playsInline
+                muted
+                preload="auto"
+                sx={{
+                    width: '100%',
+                    height: 'auto',
+                    display: 'block',
+                    filter: 'drop-shadow(0 16px 40px rgba(11,31,58,0.3))',
+                    transition: 'filter 0.3s ease',
+                }}
+            >
+                <source src="/assets/ZoyaTalk2.webm" type="video/webm" />
+                <source src="/assets/ZoyaVideoTalk.mp4" type="video/mp4" />
+            </Box>
+        </Box>
+    )
+}
+
 const HomePage = () => {
+    const [pagesOpen, setPagesOpen] = React.useState(false)
+    const [currentPage, setCurrentPage] = React.useState(0)
+    const [zoomed, setZoomed] = React.useState(false)
+    const [scale, setScale] = React.useState(1)
+    const [dragging, setDragging] = React.useState(false)
+    const [dragStart, setDragStart] = React.useState({ x: 0, y: 0 })
+    const [dragMode, setDragMode] = React.useState(false)
+    const imgContainerRef = React.useRef<HTMLDivElement>(null)
+
+    const handleWheel = React.useCallback((e: React.WheelEvent<HTMLDivElement>) => {
+        e.preventDefault()
+        setScale(s => {
+            const next = e.deltaY < 0 ? s + 0.1 : s - 0.1
+            const clamped = Math.min(5, Math.max(0.5, next))
+            if (clamped <= 1) { setZoomed(false); setDragMode(false) }
+            else setZoomed(true)
+            return clamped
+        })
+    }, [])
+
     return (
         <Box sx={{ fontFamily: '"Cormorant Garamond", serif' }}>
-
-   {/*------------------------------------         */}
-
             {/* HERO */}
             <Box sx={{ position: 'relative', minHeight: '92vh', display: 'flex', alignItems: 'center', overflow: 'hidden', bgcolor: '#F8F5EE' }}>
                 <Box sx={{ position: 'absolute', inset: 0, backgroundImage: meanderPattern, backgroundSize: '40px 40px', opacity: 0.4 }} />
@@ -181,17 +316,11 @@ const HomePage = () => {
                     <Box component="img" src="/assets/santoriny.jpg" alt="Санторини" sx={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block', animation: `${slideUp} 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both` }} />
                     <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(11,31,58,0.3) 0%, transparent 60%)' }} />
                 </Box>
-
                 <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
                     <Grid container>
                         <Grid size={{ xs: 12, md: 7 }}>
                             <Box sx={{ pr: { md: 6 } }}>
-                                <Typography variant="overline" sx={{
-                                    color: '#C9A84C', letterSpacing: '0.25em', fontSize: '0.7rem',
-                                    fontFamily: '"Cinzel", serif', display: 'block', mb: 3,
-                                    opacity: 0,
-                                    animation: `${slideUp} 0.8s ease 0.2s forwards`,
-                                }}>
+                                <Typography variant="overline" sx={{ color: '#C9A84C', letterSpacing: '0.25em', fontSize: '0.7rem', fontFamily: '"Cinzel", serif', display: 'block', mb: 3, opacity: 0, animation: `${slideUp} 0.8s ease 0.2s forwards` }}>
                                     Древний и современный
                                 </Typography>
                                 <Box sx={{ mb: 1 }}>
@@ -206,12 +335,74 @@ const HomePage = () => {
                                     Изучайте древнегреческий — язык Гомера, Платона и Евангелия.
                                 </Typography>
                                 <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', opacity: 0, animation: `${slideUp} 0.8s ease 4.8s forwards` }}>
-                                    <Button variant="contained" component={Link} to="/courses" sx={{ bgcolor: '#0B1F3A', color: 'white', px: 4, py: 1.5, fontFamily: '"Cinzel", serif', fontSize: '0.75rem', letterSpacing: '0.15em', borderRadius: 0, '&:hover': { bgcolor: '#C9A84C', color: '#0B1F3A' }, transition: 'all 0.3s ease' }}>
-                                        Начать обучение
-                                    </Button>
-                                    <Button variant="outlined" component={Link} to="/books" sx={{ borderColor: '#C9A84C', color: '#0B1F3A', px: 4, py: 1.5, fontFamily: '"Cinzel", serif', fontSize: '0.75rem', letterSpacing: '0.15em', borderRadius: 0, borderWidth: '1.5px', '&:hover': { bgcolor: 'rgba(201,168,76,0.08)', borderColor: '#C9A84C', borderWidth: '1.5px' } }}>
-                                        Книжный магазин
-                                    </Button>
+                                    {/* Кнопка с анимированным греческим меандром */}
+                                    <Box
+                                        component={Link}
+                                        to="/books"
+                                        sx={{
+                                            display: 'inline-block',
+                                            textDecoration: 'none',
+                                            position: 'relative',
+                                            bgcolor: '#0B1F3A',
+                                            px: 5, py: 2.5,
+                                            cursor: 'pointer',
+                                            transition: 'all 0.3s ease',
+                                            overflow: 'hidden',
+                                            '&:hover': { bgcolor: '#1B3A6A', boxShadow: '0 4px 24px rgba(201,168,76,0.3)' },
+                                        }}
+                                    >
+                                        {/* Меандр сверху — анимация слева направо */}
+                                        <Box sx={{
+                                            position: 'absolute', top: 0, left: 0, right: 0, height: '10px',
+                                            overflow: 'hidden',
+                                        }}>
+                                            <Box sx={{
+                                                height: '10px',
+                                                width: '200%',
+                                                backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='10' viewBox='0 0 40 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 5 h5 v-5 h10 v10 h-5 v-5 h-5 M20 5 h5 v-5 h10 v10 h-5 v-5 h-5' fill='none' stroke='%23C9A84C' stroke-width='1.5'/%3E%3C/svg%3E")`,
+                                                backgroundRepeat: 'repeat-x',
+                                                backgroundSize: '40px 10px',
+                                                animation: `${marquee} 6s linear infinite`,
+                                            }} />
+                                        </Box>
+                                        {/* Меандр снизу — анимация справа налево */}
+                                        <Box sx={{
+                                            position: 'absolute', bottom: 0, left: 0, right: 0, height: '10px',
+                                            overflow: 'hidden',
+                                        }}>
+                                            <Box sx={{
+                                                height: '10px',
+                                                width: '200%',
+                                                backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='10' viewBox='0 0 40 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 5 h5 v-5 h10 v10 h-5 v-5 h-5 M20 5 h5 v-5 h10 v10 h-5 v-5 h-5' fill='none' stroke='%23C9A84C' stroke-width='1.5'/%3E%3C/svg%3E")`,
+                                                backgroundRepeat: 'repeat-x',
+                                                backgroundSize: '40px 10px',
+                                                animation: `${marquee} 6s linear infinite reverse`,
+                                            }} />
+                                        </Box>
+                                        {/* Текст */}
+                                        <Box sx={{ textAlign: 'center', px: 1, py: 0.5 }}>
+                                            <Typography sx={{
+                                                fontFamily: '"Cinzel", serif',
+                                                fontSize: '0.6rem', letterSpacing: '0.3em',
+                                                color: '#C9A84C', mb: 0.5,
+                                            }}>✦ КУПИТЬ ✦</Typography>
+                                            <Typography sx={{
+                                                fontFamily: '"Cormorant Garamond", serif',
+                                                fontSize: '1.1rem', fontWeight: 700,
+                                                color: '#F8F5EE', lineHeight: 1.3,
+                                            }}>Интенсивный курс</Typography>
+                                            <Typography sx={{
+                                                fontFamily: '"Cormorant Garamond", serif',
+                                                fontSize: '1rem', fontStyle: 'italic',
+                                                color: '#F8F5EE', lineHeight: 1.3,
+                                            }}>«Греческий за 45 дней»</Typography>
+                                            <Typography sx={{
+                                                fontFamily: '"Cinzel", serif',
+                                                fontSize: '0.6rem', letterSpacing: '0.2em',
+                                                color: '#C9A84C', mt: 0.5,
+                                            }}>УРОВНИ А1 · А2</Typography>
+                                        </Box>
+                                    </Box>
                                 </Box>
                                 <Box sx={{ display: 'flex', gap: 5, mt: 7, pt: 4, borderTop: '1px solid rgba(201,168,76,0.3)', opacity: 0, animation: `${slideUp} 0.8s ease 5.1s forwards` }}>
                                     {[{ n: '2 400+', label: 'Учеников' }, { n: '48', label: 'Курсов' }, { n: '12', label: 'Лет опыта' }].map(s => (
@@ -226,10 +417,13 @@ const HomePage = () => {
                     </Grid>
                 </Container>
                 <Box sx={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 3, background: 'linear-gradient(90deg, transparent, #C9A84C 30%, #C9A84C 70%, transparent)' }} />
+
+                {/* ВИДЕО */}
+                <HeroVideo />
             </Box>
 
             <MarqueeBand dark={false} />
-{/*-------------------------------------*/}
+
             {/* QUOTE BAND */}
             <Box sx={{ bgcolor: '#0B1F3A', py: 4, textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
                 <Box sx={{ position: 'absolute', inset: 0, backgroundImage: `radial-gradient(circle, rgba(201,168,76,0.07) 1px, transparent 1px)`, backgroundSize: '24px 24px' }} />
@@ -241,99 +435,124 @@ const HomePage = () => {
                 </Typography>
             </Box>
 
-            {/* FEATURES + мини-книга */}
+            {/* FEATURES + О КУРСЕ */}
             <Box sx={{ py: { xs: 8, md: 12 }, bgcolor: '#F8F5EE', overflow: 'visible', overflowX: 'clip', position: 'relative' }}>
                 <Container maxWidth="lg" sx={{ overflow: 'visible', position: 'relative' }}>
                     <Box sx={{ position: 'relative', mb: 4, overflow: 'visible' }}>
-                        <Box sx={{ textAlign: 'center' }}>
+
+                        {/* Заголовок */}
+                        <Box sx={{ textAlign: 'center', mb: 4 }}>
                             <Typography variant="overline" sx={{ color: '#C9A84C', letterSpacing: '0.25em', fontFamily: '"Cinzel", serif', fontSize: '0.7rem' }}>
                                 Что мы предлагаем
                             </Typography>
                             <Typography variant="h3" sx={{ color: '#0B1F3A', fontFamily: '"Cormorant Garamond", serif', fontWeight: 600, fontSize: { xs: '2rem', md: '3rem' }, mt: 1 }}>
-                                Три пути к языку
+                                О курсе:
                             </Typography>
                         </Box>
 
                         {/* ПРАВАЯ ВЕТКА */}
-                        <Box
-                            component="img"
-                            src="/assets/olive.jpg"
-                            alt=""
-                            sx={{
-                                position: 'absolute',
-                                right: { xs: -232, md: -312, lg: -352 },
-                                top: 'calc(50% + 38px)',
-                                transform: 'translateY(-50%) scaleX(-1) rotate(5deg)',
-                                width: { xs: 140, md: 200, lg: 240 },
-                                height: 'auto',
-                                pointerEvents: 'none',
-                                zIndex: 10,
-                                mixBlendMode: 'multiply',
-                                transformOrigin: 'left center',
-                                opacity: 0,
-                                animation: `${fadeInBranchRight} 1s ease 0.4s forwards, ${floatRight} 5s ease-in-out 1.4s infinite`,
-                            }}
-                        />
-
+                        <Box component="img" src="/assets/olive.jpg" alt="" sx={{ position: 'absolute', right: { xs: -232, md: -312, lg: -352 }, top: 'calc(50% + 38px)', transform: 'translateY(-50%) scaleX(-1) rotate(5deg)', width: { xs: 140, md: 200, lg: 240 }, height: 'auto', pointerEvents: 'none', zIndex: 10, mixBlendMode: 'multiply', transformOrigin: 'left center', opacity: 0, animation: `${fadeInBranchRight} 1s ease 0.4s forwards, ${floatRight} 5s ease-in-out 1.4s infinite` }} />
                         {/* ЛЕВАЯ ВЕТКА */}
-                        <Box
-                            component="img"
-                            src="/assets/olive.jpg"
-                            alt=""
-                            sx={{
-                                position: 'absolute',
-                                left: { xs: -4, md: -84, lg: -124 },
-                                top: 'calc(50% + 20px)',
-                                transform: 'translateY(-50%) rotate(8deg) scale(0.75)',
-                                width: { xs: 140, md: 200, lg: 240 },
-                                height: 'auto',
-                                pointerEvents: 'none',
-                                zIndex: 9,
-                                mixBlendMode: 'multiply',
-                                transformOrigin: 'right center',
-                                opacity: 0,
-                                animation: `${fadeInBranch} 1s ease 0.6s forwards, ${floatLeft} 6s ease-in-out 1.6s infinite`,
-                            }}
-                        />
-
+                        <Box component="img" src="/assets/olive.jpg" alt="" sx={{ position: 'absolute', left: { xs: -4, md: -84, lg: -124 }, top: 'calc(50% + 20px)', transform: 'translateY(-50%) rotate(8deg) scale(0.75)', width: { xs: 140, md: 200, lg: 240 }, height: 'auto', pointerEvents: 'none', zIndex: 9, mixBlendMode: 'multiply', transformOrigin: 'right center', opacity: 0, animation: `${fadeInBranch} 1s ease 0.6s forwards, ${floatLeft} 6s ease-in-out 1.6s infinite` }} />
                         {/* ДОПОЛНИТЕЛЬНАЯ ПРАВАЯ ВЕТКА */}
-                        <Box
-                            component="img"
-                            src="/assets/olive.jpg"
-                            alt=""
-                            sx={{
-                                position: 'absolute',
-                                right: { xs: -202, md: -272, lg: -312 },
-                                top: 'calc(50% - 22px)',
-                                transform: 'translateY(-50%) scaleX(-1) rotate(8deg) scale(0.75)',
-                                width: { xs: 140, md: 200, lg: 240 },
-                                height: 'auto',
-                                pointerEvents: 'none',
-                                zIndex: 9,
-                                mixBlendMode: 'multiply',
-                                transformOrigin: 'left center',
-                                opacity: 0,
-                                animation: `${fadeInBranchRight} 1s ease 0.8s forwards, ${floatRight} 6s ease-in-out 1.8s infinite`,
-                            }}
-                        />
+                        <Box component="img" src="/assets/olive.jpg" alt="" sx={{ position: 'absolute', right: { xs: -202, md: -272, lg: -312 }, top: 'calc(50% - 22px)', transform: 'translateY(-50%) scaleX(-1) rotate(8deg) scale(0.75)', width: { xs: 140, md: 200, lg: 240 }, height: 'auto', pointerEvents: 'none', zIndex: 9, mixBlendMode: 'multiply', transformOrigin: 'left center', opacity: 0, animation: `${fadeInBranchRight} 1s ease 0.8s forwards, ${floatRight} 6s ease-in-out 1.8s infinite` }} />
 
                         <Box sx={{ display: { xs: 'none', lg: 'block' }, position: 'absolute', top: -60, right: -20, width: 280, height: 210, zIndex: 10 }}>
                             <GreekBook mini />
                         </Box>
                     </Box>
 
-                    <Box sx={{ mt: 4 }}>
-                        <Grid container spacing={3}>
-                            {features.map((f, i) => (
-                                <Grid key={f.title} size={{ xs: 12, md: 4 }}>
+                    {/* Карточка с текстом + статуи по бокам */}
+                    <Box sx={{ mt: 4, position: 'relative' }}>
+                        {/* СТАТУЯ СЛЕВА */}
+                        <Box
+                            component="img"
+                            src="/assets/stature2.png"
+                            alt=""
+                            sx={{
+                                position: 'absolute',
+                                left: { xs: -40, md: -80, lg: -100 },
+                                bottom: 0,
+                                height: { xs: '300px', md: '440px', lg: '520px' },
+                                width: 'auto',
+                                opacity: 0.95,
+                                pointerEvents: 'none',
+                                userSelect: 'none',
+                                zIndex: 5,
+                                filter: 'drop-shadow(0 12px 28px rgba(11,31,58,0.15))',
+                            }}
+                        />
+
+                        {/* СТАТУЯ СПРАВА (зеркальная) */}
+                        <Box
+                            component="img"
+                            src="/assets/stature2.png"
+                            alt=""
+                            sx={{
+                                position: 'absolute',
+                                right: { xs: -40, md: -80, lg: -100 },
+                                bottom: 0,
+                                height: { xs: '300px', md: '440px', lg: '520px' },
+                                width: 'auto',
+                                opacity: 0.95,
+                                pointerEvents: 'none',
+                                userSelect: 'none',
+                                zIndex: 5,
+                                transform: 'scaleX(-1)',
+                                filter: 'drop-shadow(0 12px 28px rgba(11,31,58,0.15))',
+                            }}
+                        />
+
+                        <Grid container spacing={3} justifyContent="center">
+                            {features.map((f) => (
+                                <Grid key={f.title} size={{ xs: 12, md: 10 }} sx={{ mx: 'auto' }}>
                                     <Card sx={{ height: '100%', border: '1px solid rgba(201,168,76,0.25)', borderTop: '3px solid #C9A84C', bgcolor: '#FFFFFF', p: 1, transition: 'all 0.3s ease', '&:hover': { borderTopColor: '#1B8FE0', transform: 'translateY(-4px)', boxShadow: '0 12px 40px rgba(27,143,224,0.12)' } }}>
                                         <CardContent sx={{ p: 4 }}>
-                                            <Typography sx={{ fontFamily: '"Cinzel", serif', fontSize: '0.65rem', color: '#C9A84C', letterSpacing: '0.2em', mb: 2, display: 'block' }}>
-                                                {String(i + 1).padStart(2, '0')} — {f.label}
-                                            </Typography>
-                                            <Typography sx={{ fontSize: '2.5rem', mb: 2 }}>{f.emoji}</Typography>
-                                            <Typography variant="h5" sx={{ fontFamily: '"Cormorant Garamond", serif', fontWeight: 700, color: '#0B1F3A', mb: 2, fontSize: '1.6rem' }}>{f.title}</Typography>
-                                            <Typography sx={{ fontFamily: '"Lato", sans-serif', color: '#3A5A82', lineHeight: 1.8, fontSize: '0.95rem' }}>{f.desc}</Typography>
+                                            {courseDescription.map((item, j) => (
+                                                typeof item === 'string' ? (
+                                                    <Typography key={j} sx={{ fontFamily: '"Lato", sans-serif', fontSize: '1.08rem', color: '#3A5A82', lineHeight: 2.0, mb: 2 }}>
+                                                        {item}
+                                                    </Typography>
+                                                ) : (
+                                                    <Typography key={j} sx={{ fontFamily: '"Lato", sans-serif', fontSize: '1.08rem', color: '#3A5A82', lineHeight: 2.0, mb: 2 }}>
+                                                        <Box component="span" sx={{
+                                                            fontFamily: '"Cinzel", serif',
+                                                            fontSize: '1rem',
+                                                            fontWeight: 700,
+                                                            background: 'linear-gradient(90deg, #C9A84C 0%, #F5D78E 25%, #0d3d7a 50%, #F5D78E 75%, #C9A84C 100%)',
+                                                            backgroundSize: '200% auto',
+                                                            WebkitBackgroundClip: 'text',
+                                                            WebkitTextFillColor: 'transparent',
+                                                            backgroundClip: 'text',
+                                                            animation: `${shimmer} 3s linear ${j * 0.3}s infinite`,
+                                                            letterSpacing: '0.08em',
+                                                        }}>
+                                                            {item.caps}
+                                                        </Box>
+                                                        {item.rest}
+                                                    </Typography>
+                                                )
+                                            ))}
+                                            {/* Кнопка просмотра страниц */}
+                                            <Box sx={{ mt: 4, pt: 3, borderTop: '1px solid rgba(201,168,76,0.2)', display: 'flex', justifyContent: 'center' }}>
+                                                <Button
+                                                    variant="outlined"
+                                                    onClick={() => { setCurrentPage(0); setPagesOpen(true); }}
+                                                    sx={{
+                                                        borderColor: '#C9A84C',
+                                                        color: '#0B1F3A',
+                                                        px: 5, py: 1.6,
+                                                        fontFamily: '"Cinzel", serif',
+                                                        fontSize: '1.1rem',
+                                                        letterSpacing: '0.12em',
+                                                        borderRadius: 0,
+                                                        borderWidth: '1.5px',
+                                                        '&:hover': { bgcolor: 'rgba(201,168,76,0.08)', borderWidth: '1.5px' },
+                                                    }}
+                                                >
+                                                    📖 Просмотр страниц книги
+                                                </Button>
+                                            </Box>
                                         </CardContent>
                                     </Card>
                                 </Grid>
@@ -342,53 +561,145 @@ const HomePage = () => {
                     </Box>
                 </Container>
             </Box>
-{/*----------------------------------------*/}
-            {/* PHILOSOPHY */}
-            {/*<Box sx={{ py: { xs: 8, md: 14 }, bgcolor: '#0B1F3A', position: 'relative', overflow: 'hidden' }}>*/}
-            {/*    <Box sx={{ position: 'absolute', inset: 0, backgroundImage: meanderPattern, backgroundSize: '40px 40px', opacity: 0.15 }} />*/}
-            {/*    <Container maxWidth="md" sx={{ position: 'relative', textAlign: 'center' }}>*/}
-            {/*        <Typography variant="overline" sx={{ color: '#C9A84C', letterSpacing: '0.25em', fontFamily: '"Cinzel", serif', fontSize: '0.7rem' }}>Наша философия</Typography>*/}
-            {/*        <Typography variant="h2" sx={{ color: '#F8F5EE', fontFamily: '"Cormorant Garamond", serif', fontStyle: 'italic', fontWeight: 400, fontSize: { xs: '2rem', md: '3.2rem' }, lineHeight: 1.4, mt: 2, mb: 4 }}>*/}
-            {/*            "Язык — это не просто слова.<br />Это мышление цивилизации"*/}
-            {/*        </Typography>*/}
-            {/*        <Box sx={{ width: 60, height: 2, bgcolor: '#C9A84C', mx: 'auto', mb: 4 }} />*/}
-            {/*        <Typography sx={{ fontFamily: '"Lato", sans-serif', color: 'rgba(248,245,238,0.7)', fontSize: '1.05rem', lineHeight: 1.9, maxWidth: 600, mx: 'auto', fontWeight: 300 }}>*/}
-            {/*            Мы убеждены: изучать греческий — значит думать иначе.*/}
-            {/*            Каждый урок открывает не просто грамматику, но целый способ*/}
-            {/*            видеть мир — через призму тех, кто заложил основы западной мысли.*/}
-            {/*        </Typography>*/}
-            {/*    </Container>*/}
-            {/*</Box>*/}
+
+            {/* МОДАЛЬНОЕ ОКНО — ПРОСМОТР СТРАНИЦ */}
+            <Dialog
+                open={pagesOpen}
+                onClose={() => { setPagesOpen(false); setZoomed(false); setScale(1); setDragMode(false); }}
+                maxWidth={false}
+                fullScreen
+                PaperProps={{
+                    sx: { bgcolor: '#060E1C', borderRadius: 0, overflow: 'hidden' }
+                }}
+            >
+                <DialogContent sx={{ p: 0, display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
+                    {/* Верхняя панель */}
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', px: 3, py: 1.5, borderBottom: '1px solid rgba(201,168,76,0.2)', flexShrink: 0 }}>
+                        <Typography sx={{ fontFamily: '"Cormorant Garamond", serif', fontSize: '1.2rem', fontWeight: 700, color: '#F8F5EE' }}>
+                            «Греческий за 45 дней» &nbsp;
+                            <Box component="span" sx={{ fontFamily: '"Cinzel", serif', fontSize: '0.65rem', color: '#C9A84C', letterSpacing: '0.2em' }}>
+                                {currentPage + 1} / {bookPages.length}
+                                {scale !== 1 && ` · ${Math.round(scale * 100)}%`}
+                            </Box>
+                        </Typography>
+                        <IconButton onClick={() => { setPagesOpen(false); setZoomed(false); setScale(1); setDragMode(false); }} sx={{ color: '#F8F5EE' }}>
+                            <Typography sx={{ fontSize: '1.4rem', lineHeight: 1 }}>✕</Typography>
+                        </IconButton>
+                    </Box>
+
+                    {/* Страница — занимает всё доступное место */}
+                    <Box
+                        ref={imgContainerRef}
+                        sx={{
+                            flex: 1,
+                            overflow: zoomed ? 'auto' : 'hidden',
+                            display: 'flex',
+                            alignItems: zoomed ? 'flex-start' : 'center',
+                            justifyContent: 'center',
+                            cursor: dragMode && zoomed ? (dragging ? 'grabbing' : 'grab') : (zoomed ? 'zoom-out' : 'default'),
+                            p: zoomed ? 2 : 0,
+                            userSelect: 'none',
+                        }}
+                        onMouseDown={(e) => {
+                            if (!dragMode || !zoomed) return
+                            setDragging(true)
+                            const el = imgContainerRef.current!
+                            setDragStart({ x: e.clientX + el.scrollLeft, y: e.clientY + el.scrollTop })
+                        }}
+                        onMouseMove={(e) => {
+                            if (!dragging || !dragMode) return
+                            const el = imgContainerRef.current!
+                            el.scrollLeft = dragStart.x - e.clientX
+                            el.scrollTop = dragStart.y - e.clientY
+                        }}
+                        onMouseUp={() => setDragging(false)}
+                        onMouseLeave={() => setDragging(false)}
+                        onWheel={handleWheel}
+                        onClick={() => { if (!dragMode && zoomed) { setZoomed(false); setScale(1) } }}
+                    >
+                        <Box
+                            component="img"
+                            src={bookPages[currentPage]}
+                            alt={`Страница ${currentPage + 1}`}
+                            sx={{
+                                width: zoomed ? 'auto' : '100%',
+                                height: zoomed ? 'auto' : '100%',
+                                maxWidth: zoomed ? 'none' : '100%',
+                                maxHeight: zoomed ? 'none' : '100%',
+                                objectFit: zoomed ? 'none' : 'contain',
+                                transform: `scale(${scale})`,
+                                transformOrigin: 'top left',
+                                transition: 'transform 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                                display: 'block',
+                                userSelect: 'none',
+                                pointerEvents: 'none',
+                            }}
+                        />
+                    </Box>
+
+                    {/* Нижняя панель */}
+                    <Box sx={{ flexShrink: 0, borderTop: '1px solid rgba(201,168,76,0.2)', px: 3, py: 1.5, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 2 }}>
+                        <Button
+                            onClick={(e) => { e.stopPropagation(); setCurrentPage(p => Math.max(0, p - 1)); setZoomed(false); setScale(1); setDragMode(false); }}
+                            disabled={currentPage === 0}
+                            variant="outlined"
+                            sx={{ fontFamily: '"Cinzel", serif', fontSize: '0.7rem', color: '#F8F5EE', borderColor: 'rgba(201,168,76,0.5)', borderRadius: 0, minWidth: 100 }}
+                        >← Назад</Button>
+
+                        {/* Кнопки управления */}
+                        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                            {/* Лупа */}
+                            <IconButton
+                                onClick={(e) => { e.stopPropagation(); if (zoomed) { setZoomed(false); setScale(1); setDragMode(false); } else { setZoomed(true); setScale(2.2); } }}
+                                sx={{
+                                    color: zoomed ? '#C9A84C' : '#F8F5EE',
+                                    border: '1px solid',
+                                    borderColor: zoomed ? '#C9A84C' : 'rgba(255,255,255,0.3)',
+                                    borderRadius: '50%',
+                                    width: 48, height: 48,
+                                    transition: 'all 0.2s ease',
+                                    '&:hover': { borderColor: '#C9A84C', color: '#C9A84C' },
+                                }}
+                            >
+                                <Typography sx={{ fontSize: '1.3rem', lineHeight: 1 }}>{zoomed ? '🔍✕' : '🔍'}</Typography>
+                            </IconButton>
+                            {/* Рука — перетаскивание (только когда увеличено) */}
+                            {zoomed && (
+                                <IconButton
+                                    onClick={(e) => { e.stopPropagation(); setDragMode(d => !d); }}
+                                    sx={{
+                                        color: dragMode ? '#C9A84C' : '#F8F5EE',
+                                        border: '1px solid',
+                                        borderColor: dragMode ? '#C9A84C' : 'rgba(255,255,255,0.3)',
+                                        borderRadius: '50%',
+                                        width: 48, height: 48,
+                                        transition: 'all 0.2s ease',
+                                        '&:hover': { borderColor: '#C9A84C', color: '#C9A84C' },
+                                    }}
+                                >
+                                    <Typography sx={{ fontSize: '1.3rem', lineHeight: 1 }}>✋</Typography>
+                                </IconButton>
+                            )}
+                        </Box>
+
+                        <Button
+                            onClick={(e) => { e.stopPropagation(); setCurrentPage(p => Math.min(bookPages.length - 1, p + 1)); setZoomed(false); setScale(1); setDragMode(false); }}
+                            disabled={currentPage === bookPages.length - 1}
+                            variant="outlined"
+                            sx={{ fontFamily: '"Cinzel", serif', fontSize: '0.7rem', color: '#F8F5EE', borderColor: 'rgba(201,168,76,0.5)', borderRadius: 0, minWidth: 100 }}
+                        >Вперёд →</Button>
+                    </Box>
+                </DialogContent>
+            </Dialog>
 
             {/* PHILOSOPHY */}
             <Box sx={{ py: { xs: 8, md: 14 }, bgcolor: '#0B1F3A', position: 'relative', overflow: 'hidden', textAlign: 'center' }}>
-
-                {/* ВИДЕО-ФОН */}
-                <Box
-                    component="video"
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    sx={{
-                        position: 'absolute',
-                        inset: 0,
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        zIndex: 0,
-                        opacity: 0.3,
-                    }}
-                >
+                <Box component="video" autoPlay muted loop playsInline sx={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0, opacity: 0.3 }}>
                     <source src="/assets/hero-video.mp4" type="video/mp4" />
                 </Box>
-
                 <Box sx={{ position: 'absolute', inset: 0, backgroundImage: meanderPattern, backgroundSize: '40px 40px', opacity: 0.15, zIndex: 1 }} />
-
                 <Container maxWidth="md" sx={{ position: 'relative', zIndex: 2 }}>
-                    <Typography variant="overline" sx={{ color: '#C9A84C', letterSpacing: '0.25em', fontFamily: '"Cinzel", serif', fontSize: '0.7rem' }}>
-                        Наша философия
-                    </Typography>
+                    <Typography variant="overline" sx={{ color: '#C9A84C', letterSpacing: '0.25em', fontFamily: '"Cinzel", serif', fontSize: '0.7rem' }}>Наша философия</Typography>
                     <Typography variant="h2" sx={{ color: '#F8F5EE', fontFamily: '"Cormorant Garamond", serif', fontStyle: 'italic', fontWeight: 400, fontSize: { xs: '2rem', md: '3.2rem' }, lineHeight: 1.4, mt: 2, mb: 4 }}>
                         "Язык — это не просто слова.<br />Это мышление цивилизации"
                     </Typography>
@@ -399,9 +710,8 @@ const HomePage = () => {
                         видеть мир — через призму тех, кто заложил основы западной мысли.
                     </Typography>
                 </Container>
-
             </Box>
-{/*------------------------------------------------*/}
+
             {/* TESTIMONIALS */}
             <Box sx={{ py: { xs: 8, md: 12 }, bgcolor: '#F8F5EE' }}>
                 <Container maxWidth="lg">
@@ -409,7 +719,7 @@ const HomePage = () => {
                         <Typography variant="overline" sx={{ color: '#C9A84C', letterSpacing: '0.25em', fontFamily: '"Cinzel", serif', fontSize: '0.7rem' }}>Отзывы</Typography>
                         <Typography variant="h3" sx={{ fontFamily: '"Cormorant Garamond", serif', color: '#0B1F3A', fontWeight: 600, fontSize: { xs: '2rem', md: '3rem' }, mt: 1 }}>Голоса учеников</Typography>
                     </Box>
-                    <Grid container spacing={3}>
+                    <Grid container spacing={3} justifyContent="center">
                         {testimonials.map(t => (
                             <Grid key={t.name} size={{ xs: 12, md: 4 }}>
                                 <Box sx={{ bgcolor: '#FFFFFF', p: 4, border: '1px solid rgba(201,168,76,0.2)', height: '100%' }}>
@@ -428,38 +738,8 @@ const HomePage = () => {
 
             {/* ВЕТКИ ПОД ГОЛОСАМИ УЧЕНИКОВ */}
             <Box sx={{ position: 'relative', bgcolor: '#F8F5EE', overflow: 'visible', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: { xs: 8, md: 16, lg: 24 }, pt: 2, pb: 0, pl: '152px' }}>
-                <Box
-                    component="img"
-                    src="/assets/olive.jpg"
-                    alt=""
-                    sx={{
-                        position: 'relative',
-                        top: '38px',
-                        transform: 'rotate(-5deg)',
-                        width: { xs: 140, md: 200 },
-                        height: 'auto',
-                        mixBlendMode: 'multiply',
-                        transformOrigin: 'right center',
-                        opacity: 0,
-                        animation: `${fadeInBranch} 1s ease 0.3s forwards, ${floatLeft} 5s ease-in-out 1.3s infinite`,
-                    }}
-                />
-                <Box
-                    component="img"
-                    src="/assets/olive.jpg"
-                    alt=""
-                    sx={{
-                        position: 'relative',
-                        top: '38px',
-                        transform: 'scaleX(-1) rotate(-5deg)',
-                        width: { xs: 140, md: 200 },
-                        height: 'auto',
-                        mixBlendMode: 'multiply',
-                        transformOrigin: 'left center',
-                        opacity: 0,
-                        animation: `${fadeInBranchRight} 1s ease 0.5s forwards, ${floatRight} 5s ease-in-out 1.5s infinite`,
-                    }}
-                />
+                <Box component="img" src="/assets/olive.jpg" alt="" sx={{ position: 'relative', top: '38px', transform: 'rotate(-5deg)', width: { xs: 140, md: 200 }, height: 'auto', mixBlendMode: 'multiply', transformOrigin: 'right center', opacity: 0, animation: `${fadeInBranch} 1s ease 0.3s forwards, ${floatLeft} 5s ease-in-out 1.3s infinite` }} />
+                <Box component="img" src="/assets/olive.jpg" alt="" sx={{ position: 'relative', top: '38px', transform: 'scaleX(-1) rotate(-5deg)', width: { xs: 140, md: 200 }, height: 'auto', mixBlendMode: 'multiply', transformOrigin: 'left center', opacity: 0, animation: `${fadeInBranchRight} 1s ease 0.5s forwards, ${floatRight} 5s ease-in-out 1.5s infinite` }} />
             </Box>
 
             {/* CTA */}

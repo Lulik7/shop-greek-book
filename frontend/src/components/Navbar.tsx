@@ -15,8 +15,6 @@ const Navbar = () => {
                     ΕΛΛΗΝΙΚΑ
                 </Typography>
                 <Box sx={{ display: 'flex', gap: 1 }}>
-                    <Button color="inherit" component={Link} to="/courses">Курсы</Button>
-                    <Button color="inherit" component={Link} to="/books">Книги</Button>
                     <Button color="inherit" component={Link} to="/blog">Блог</Button>
                     <Button color="inherit" component={Link} to="/contact">Контакты</Button>
                     <Button color="inherit" component={Link} to="/login">Войти</Button>
