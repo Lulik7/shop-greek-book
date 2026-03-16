@@ -10,16 +10,26 @@ const Navbar = () => {
                     variant="h6"
                     component={Link}
                     to="/"
-                    sx={{ flexGrow: 1, fontWeight: 700, color: 'white', textDecoration: 'none', letterSpacing: 2 }}
+                    sx={{ flexGrow: 1, fontWeight: 700, color: 'white', textDecoration: 'none', letterSpacing: 2, fontFamily: '"Cinzel", serif', fontSize: '1.2rem' }}
                 >
                     ΕΛΛΗΝΙΚΑ
                 </Typography>
-                <Box sx={{ display: 'flex', gap: 1 }}>
-                    <Button color="inherit" component={Link} to="/blog">Блог</Button>
-                    <Button color="inherit" component={Link} to="/contact">Контакты</Button>
-                    <Button color="inherit" component={Link} to="/login">Войти</Button>
-                    <Button variant="outlined" color="inherit" component={Link} to="/register"
-                            sx={{ borderColor: '#C9A84C', color: '#C9A84C' }}>
+                <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+                    <Button color="inherit" component={Link} to="/contact"
+                            sx={{ fontFamily: '"Cinzel", serif', fontSize: '0.9rem', letterSpacing: '0.12em' }}>
+                        Контакты
+                    </Button>
+                    <Button color="inherit" component={Link} to="/login"
+                            sx={{ fontFamily: '"Cinzel", serif', fontSize: '0.9rem', letterSpacing: '0.12em' }}>
+                        Войти
+                    </Button>
+                    <Button variant="outlined" component={Link} to="/register"
+                            sx={{
+                                borderColor: '#C9A84C', color: '#C9A84C',
+                                fontFamily: '"Cinzel", serif', fontSize: '0.9rem',
+                                letterSpacing: '0.12em', borderRadius: 0,
+                                '&:hover': { bgcolor: 'rgba(201,168,76,0.1)', borderColor: '#C9A84C' },
+                            }}>
                         Регистрация
                     </Button>
                     <IconButton color="inherit" component={Link} to="/books">
