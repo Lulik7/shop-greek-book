@@ -54,22 +54,6 @@ const shimmer = keyframes`
     0%   { background-position: -200% center; }
     100% { background-position: 200% center; }
 `
-const borderTop = keyframes`
-    from { background-position: 0 0; }
-    to   { background-position: 512px 0; }
-`
-const borderRight = keyframes`
-    from { background-position: 0 0; }
-    to   { background-position: 0 512px; }
-`
-const borderBottom = keyframes`
-    from { background-position: 0 0; }
-    to   { background-position: -512px 0; }
-`
-const borderLeft = keyframes`
-    from { background-position: 0 0; }
-    to   { background-position: 0 -512px; }
-`
 
 const features = [
     { title: 'Книги', desc: 'Учебники, словари, классика в оригинале', emoji: '🏛️', label: 'Bibliothēkē' },
