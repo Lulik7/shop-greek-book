@@ -229,7 +229,7 @@ const HeroVideo = () => {
                 cursor: 'pointer',
             }}
         >
-            {/* Смайлик "наведи мышку" */}
+            {/* Подсказка "наведи мышку" + иконка уха */}
             <Box sx={{
                 position: 'absolute',
                 bottom: -3,
@@ -260,7 +260,23 @@ const HeroVideo = () => {
                     borderRadius: '4px',
                     boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
                 }}>наведи мышку</Typography>
+
             </Box>
+
+            {/* Громкоговоритель — развёрнут, сдвинут к шляпе */}
+            <Box sx={{
+                position: 'absolute',
+                left: 58,
+                top: '50%',
+                transform: 'translateY(-50%) scaleX(-1)',
+                zIndex: 4,
+                pointerEvents: 'none',
+                opacity: hovered ? 0 : 1,
+                transition: 'opacity 0.3s ease',
+                fontSize: '1.6rem',
+                lineHeight: 1,
+                filter: 'grayscale(1) brightness(0.45)',
+            }}>🔊</Box>
 
             {/* Первый кадр видео — всегда виден как постер */}
             {/* Само видео — стоит пока не навели */}
@@ -425,14 +441,32 @@ const HomePage = () => {
             <MarqueeBand dark={false} />
 
             {/* QUOTE BAND */}
-            <Box sx={{ bgcolor: '#0B1F3A', py: 4, textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+            <Box sx={{ bgcolor: '#0B1F3A', py: 5, textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
                 <Box sx={{ position: 'absolute', inset: 0, backgroundImage: `radial-gradient(circle, rgba(201,168,76,0.07) 1px, transparent 1px)`, backgroundSize: '24px 24px' }} />
-                <Typography sx={{ fontFamily: '"Cormorant Garamond", serif', fontSize: { xs: '1.4rem', md: '2rem' }, fontStyle: 'italic', color: '#C9A84C', letterSpacing: '0.05em', position: 'relative' }}>
-                    «Γνῶθι σεαυτόν»
-                </Typography>
-                <Typography sx={{ fontFamily: '"Lato", sans-serif', fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)', letterSpacing: '0.2em', textTransform: 'uppercase', mt: 1, position: 'relative' }}>
-                    Познай самого себя — Дельфийский оракул
-                </Typography>
+                <Container maxWidth="md" sx={{ position: 'relative' }}>
+                    <Typography sx={{ color: 'rgba(201,168,76,0.4)', fontSize: '0.8rem', letterSpacing: '0.4em', mb: 2 }}>✦ ✦ ✦</Typography>
+
+                    {/* Греческий оригинал */}
+                    <Typography sx={{ fontFamily: '"Cormorant Garamond", serif', fontSize: { xs: '1.6rem', md: '2.4rem' }, fontStyle: 'italic', color: '#C9A84C', letterSpacing: '0.05em', lineHeight: 1.4, mb: 2 }}>
+                        «Ἓν οἶδα ὅτι οὐδὲν οἶδα»
+                    </Typography>
+
+                    {/* Перевод */}
+                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2, flexWrap: 'wrap', mb: 1.5 }}>
+                        <Box sx={{ width: 40, height: '1px', bgcolor: 'rgba(201,168,76,0.35)' }} />
+                        <Typography sx={{ fontFamily: '"Cormorant Garamond", serif', fontSize: { xs: '1.05rem', md: '1.35rem' }, fontStyle: 'italic', color: 'rgba(248,245,238,0.8)' }}>
+                            «Я знаю только то, что ничего не знаю»
+                        </Typography>
+                        <Box sx={{ width: 40, height: '1px', bgcolor: 'rgba(201,168,76,0.35)' }} />
+                    </Box>
+
+                    {/* Автор */}
+                    <Typography sx={{ fontFamily: '"Cinzel", serif', fontSize: '0.65rem', color: 'rgba(201,168,76,0.55)', letterSpacing: '0.25em', textTransform: 'uppercase', mt: 1.5 }}>
+                        Σωκράτης · Сократ · 470–399 до н.э.
+                    </Typography>
+
+                    <Typography sx={{ color: 'rgba(201,168,76,0.4)', fontSize: '0.8rem', letterSpacing: '0.4em', mt: 2 }}>✦ ✦ ✦</Typography>
+                </Container>
             </Box>
 
             {/* FEATURES + О КУРСЕ */}
@@ -753,11 +787,9 @@ const HomePage = () => {
                     </Typography>
                     <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center' }}>
                         <Button variant="contained" component={Link} to="/register" sx={{ bgcolor: '#C9A84C', color: '#0B1F3A', px: 5, py: 1.6, fontFamily: '"Cinzel", serif', fontSize: '0.75rem', letterSpacing: '0.15em', borderRadius: 0, fontWeight: 600, '&:hover': { bgcolor: '#DFC078' } }}>
-                            Зарегистрироваться
+                            Купить курс
                         </Button>
-                        <Button variant="outlined" component={Link} to="/courses" sx={{ borderColor: 'rgba(248,245,238,0.4)', color: '#F8F5EE', px: 5, py: 1.6, fontFamily: '"Cinzel", serif', fontSize: '0.75rem', letterSpacing: '0.15em', borderRadius: 0, '&:hover': { borderColor: '#C9A84C', color: '#C9A84C' } }}>
-                            Смотреть курсы
-                        </Button>
+
                     </Box>
                 </Container>
             </Box>
