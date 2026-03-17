@@ -27,13 +27,10 @@ const goldShimmer = keyframes`
 `
 const meanderPattern = `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 10 h10 v-10 h20 v20 h-10 v10 h-20 v-20 h10' fill='none' stroke='%23C9A84C' stroke-width='1.5' opacity='0.3'/%3E%3C/svg%3E")`
 
-// ✅ Замени на свои данные из EmailJS
-const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID'
-const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID'
-const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY'
-
-
-
+// ✅ EmailJS credentials
+const EMAILJS_SERVICE_ID  = 'service_kdinmh1'
+const EMAILJS_TEMPLATE_ID = 'template_wn67l1o'
+const EMAILJS_PUBLIC_KEY  = 'Zakagw6uLJmrTN5tM'
 
 const quotes = [
     { text: 'Γνῶθι σεαυτόν',             author: '— Дельфийский оракул', translation: 'Познай самого себя' },
@@ -136,20 +133,18 @@ const ContactPage = () => {
         }
         setSending(true)
         try {
-            const emailjs = (window as any).emailjs
-            if (!emailjs) throw new Error('EmailJS не загружен')
-
-            await emailjs.send(
+            const ejs = (window as any).emailjs
+            if (!ejs) throw new Error('EmailJS not loaded')
+            ejs.init(EMAILJS_PUBLIC_KEY)
+            await ejs.send(
                 EMAILJS_SERVICE_ID,
                 EMAILJS_TEMPLATE_ID,
                 {
-                    to_email:   'zoepavlovska@gmail.com',
-                    from_name:  form.name,
-                    from_email: form.email,
-                    message:    form.message,
-                    reply_to:   form.email,
-                },
-                EMAILJS_PUBLIC_KEY
+                    name:     form.name,
+                    email:    form.email,
+                    message:  form.message,
+                    reply_to: form.email,
+                }
             )
             setSent(true)
         } catch (e) {

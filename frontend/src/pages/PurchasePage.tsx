@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Box, Typography, Container, Button, Divider, TextField } from '@mui/material'
 import { keyframes } from '@mui/system'
 import { Link } from 'react-router-dom'
+import emailjs from '@emailjs/browser'
 
 const fadeUp = keyframes`
     from { opacity: 0; transform: translateY(20px); }
@@ -75,19 +76,11 @@ const PurchasePage = () => {
     const sendNotification = async (method: string) => {
         setSending(true)
         try {
-            const emailjs = (window as any).emailjs
-            if (emailjs) {
-                await emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', {
-                    to_email: 'zoepavlovska@gmail.com',
-                    subject: '🎓 Новая заявка на покупку курса!',
-                    buyer_name: buyerForm.name,
-                    buyer_email: buyerForm.email,
-                    buyer_phone: buyerForm.phone || 'не указан',
-                    payment_method: method,
-                    amount: '30 EUR',
-                    course: 'Греческий за 45 дней (А1-А2)',
-                }, 'YOUR_PUBLIC_KEY')
-            }
+            await emailjs.send('service_kdinmh1', 'template_wn67l1o', {
+                name: buyerForm.name,
+                email: buyerForm.email,
+                message: `Способ оплаты: ${method}\nТелефон: ${buyerForm.phone || 'не указан'}\nСумма: 30 EUR\nКурс: Греческий за 45 дней (А1-А2)`,
+            }, 'Zakagw6uLJmrTN5tM')
         } catch (e) { console.error('Email failed:', e) }
         setSending(false)
     }

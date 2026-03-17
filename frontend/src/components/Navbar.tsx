@@ -1,5 +1,4 @@
-import { AppBar, Toolbar, Typography, Button, Box, IconButton, Badge } from '@mui/material'
-import { ShoppingCart } from '@mui/icons-material'
+import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material'
 import { Link } from 'react-router-dom'
 
 const Navbar = () => {
@@ -23,7 +22,7 @@ const Navbar = () => {
                             sx={{ fontFamily: '"Cinzel", serif', fontSize: '1.05rem', letterSpacing: '0.12em' }}>
                         Контакты
                     </Button>
-                    {/* ✅ Купить курс → /login, Регистрация убрана */}
+                    {/* ✅ Купить курс → /login */}
                     <Button variant="outlined" component={Link} to="/login"
                             sx={{
                                 borderColor: '#C9A84C', color: '#C9A84C',
@@ -33,11 +32,6 @@ const Navbar = () => {
                             }}>
                         Купить курс
                     </Button>
-                    <IconButton color="inherit" component={Link} to="/books">
-                        <Badge badgeContent={0} color="error">
-                            <ShoppingCart />
-                        </Badge>
-                    </IconButton>
                 </Box>
             </Toolbar>
         </AppBar>
