@@ -54,6 +54,18 @@ const shimmer = keyframes`
     0%   { background-position: -200% center; }
     100% { background-position: 200% center; }
 `
+const glowPulse = keyframes`
+    0%, 100% { box-shadow: 0 0 0 2px rgba(30,120,255,0.8), 0 0 8px 2px rgba(30,120,255,0.5), 0 0 16px 4px rgba(30,120,255,0.2); }
+    50%       { box-shadow: 0 0 0 2px rgba(60,160,255,1), 0 0 12px 4px rgba(60,160,255,0.8), 0 0 28px 8px rgba(60,160,255,0.4), 0 0 40px 12px rgba(60,160,255,0.15); }
+`
+const borderRun = keyframes`
+    0%   { background-position: 0% 0%, 100% 0%, 100% 100%, 0% 100%; }
+    100% { background-position: 100% 0%, 100% 100%, 0% 100%, 0% 0%; }
+`
+const shimmerSlow = keyframes`
+    0%   { background-position: -300% center; }
+    100% { background-position: 300% center; }
+`
 
 const features = [
     { title: 'Книги', desc: 'Учебники, словари, классика в оригинале', emoji: '🏛️', label: 'Bibliothēkē' },
@@ -229,7 +241,6 @@ const HeroVideo = () => {
                 cursor: 'pointer',
             }}
         >
-            {/* Подсказка "наведи мышку"  */}
             <Box sx={{
                 position: 'absolute',
                 bottom: -3,
@@ -260,10 +271,8 @@ const HeroVideo = () => {
                     borderRadius: '4px',
                     boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
                 }}>наведи мышку</Typography>
-
             </Box>
 
-            {/* Громкоговоритель  */}
             <Box sx={{
                 position: 'absolute',
                 left: 58,
@@ -277,8 +286,6 @@ const HeroVideo = () => {
                 lineHeight: 1,
                 filter: 'grayscale(1) brightness(0.45)',
             }}>🔊</Box>
-
-            {/* Первый кадр видео — всегда виден как постер */}
 
             <Box
                 ref={videoRef}
@@ -301,10 +308,276 @@ const HeroVideo = () => {
     )
 }
 
+// Переиспользуемый компонент меандра — чтобы не дублировать код
+const MeanderBorder = ({ color = '%23C9A84C' }: { color?: string }) => (
+    <>
+        {/* Меандр СВЕРХУ */}
+        <Box sx={{
+            position: 'absolute', top: 0, left: 0, right: 0, height: '8px',
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='14' viewBox='0 0 40 14'%3E%3Crect x='0' y='0' width='14' height='2' fill='${color}'/%3E%3Crect x='0' y='0' width='2' height='14' fill='${color}'/%3E%3Crect x='0' y='12' width='10' height='2' fill='${color}'/%3E%3Crect x='8' y='4' width='2' height='10' fill='${color}'/%3E%3Crect x='4' y='4' width='6' height='2' fill='${color}'/%3E%3Crect x='4' y='4' width='2' height='6' fill='${color}'/%3E%3Crect x='12' y='6' width='8' height='2' fill='${color}'/%3E%3Crect x='20' y='0' width='14' height='2' fill='${color}'/%3E%3Crect x='20' y='0' width='2' height='14' fill='${color}'/%3E%3Crect x='20' y='12' width='10' height='2' fill='${color}'/%3E%3Crect x='28' y='4' width='2' height='10' fill='${color}'/%3E%3Crect x='24' y='4' width='6' height='2' fill='${color}'/%3E%3Crect x='24' y='4' width='2' height='6' fill='${color}'/%3E%3Crect x='32' y='6' width='8' height='2' fill='${color}'/%3E%3C/svg%3E")`,
+            backgroundRepeat: 'repeat-x',
+            backgroundSize: '20px 8px',
+        }} />
+        {/* Меандр СНИЗУ */}
+        <Box sx={{
+            position: 'absolute', bottom: 0, left: 0, right: 0, height: '8px',
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='14' viewBox='0 0 40 14'%3E%3Crect x='0' y='12' width='14' height='2' fill='${color}'/%3E%3Crect x='0' y='0' width='2' height='14' fill='${color}'/%3E%3Crect x='0' y='0' width='10' height='2' fill='${color}'/%3E%3Crect x='8' y='0' width='2' height='10' fill='${color}'/%3E%3Crect x='4' y='8' width='6' height='2' fill='${color}'/%3E%3Crect x='4' y='4' width='2' height='6' fill='${color}'/%3E%3Crect x='12' y='6' width='8' height='2' fill='${color}'/%3E%3Crect x='20' y='12' width='14' height='2' fill='${color}'/%3E%3Crect x='20' y='0' width='2' height='14' fill='${color}'/%3E%3Crect x='20' y='0' width='10' height='2' fill='${color}'/%3E%3Crect x='28' y='0' width='2' height='10' fill='${color}'/%3E%3Crect x='24' y='8' width='6' height='2' fill='${color}'/%3E%3Crect x='24' y='4' width='2' height='6' fill='${color}'/%3E%3Crect x='32' y='6' width='8' height='2' fill='${color}'/%3E%3C/svg%3E")`,
+            backgroundRepeat: 'repeat-x',
+            backgroundSize: '20px 8px',
+        }} />
+        {/* Меандр СЛЕВА */}
+        <Box sx={{
+            position: 'absolute', left: 0, top: 0, bottom: 0, width: '8px',
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='40' viewBox='0 0 14 40'%3E%3Crect x='0' y='0' width='2' height='14' fill='${color}'/%3E%3Crect x='0' y='0' width='14' height='2' fill='${color}'/%3E%3Crect x='12' y='0' width='2' height='10' fill='${color}'/%3E%3Crect x='4' y='8' width='10' height='2' fill='${color}'/%3E%3Crect x='4' y='4' width='2' height='6' fill='${color}'/%3E%3Crect x='4' y='4' width='6' height='2' fill='${color}'/%3E%3Crect x='6' y='12' width='2' height='8' fill='${color}'/%3E%3Crect x='0' y='20' width='2' height='14' fill='${color}'/%3E%3Crect x='0' y='20' width='14' height='2' fill='${color}'/%3E%3Crect x='12' y='20' width='2' height='10' fill='${color}'/%3E%3Crect x='4' y='28' width='10' height='2' fill='${color}'/%3E%3Crect x='4' y='24' width='2' height='6' fill='${color}'/%3E%3Crect x='4' y='24' width='6' height='2' fill='${color}'/%3E%3Crect x='6' y='32' width='2' height='8' fill='${color}'/%3E%3C/svg%3E")`,
+            backgroundRepeat: 'repeat-y',
+            backgroundSize: '8px 20px',
+        }} />
+        {/* Меандр СПРАВА */}
+        <Box sx={{
+            position: 'absolute', right: 0, top: 0, bottom: 0, width: '8px',
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='40' viewBox='0 0 14 40'%3E%3Crect x='0' y='0' width='2' height='14' fill='${color}'/%3E%3Crect x='0' y='0' width='14' height='2' fill='${color}'/%3E%3Crect x='12' y='0' width='2' height='10' fill='${color}'/%3E%3Crect x='4' y='8' width='10' height='2' fill='${color}'/%3E%3Crect x='4' y='4' width='2' height='6' fill='${color}'/%3E%3Crect x='4' y='4' width='6' height='2' fill='${color}'/%3E%3Crect x='6' y='12' width='2' height='8' fill='${color}'/%3E%3Crect x='0' y='20' width='2' height='14' fill='${color}'/%3E%3Crect x='0' y='20' width='14' height='2' fill='${color}'/%3E%3Crect x='12' y='20' width='2' height='10' fill='${color}'/%3E%3Crect x='4' y='28' width='10' height='2' fill='${color}'/%3E%3Crect x='4' y='24' width='2' height='6' fill='${color}'/%3E%3Crect x='4' y='24' width='6' height='2' fill='${color}'/%3E%3Crect x='6' y='32' width='2' height='8' fill='${color}'/%3E%3C/svg%3E")`,
+            backgroundRepeat: 'repeat-y',
+            backgroundSize: '8px 20px',
+        }} />
+    </>
+)
+
+const CourseDescriptionBlock = ({ shimmer, courseDescription, setCurrentPage, setPagesOpen, glowPulse }: any) => {
+    const [expanded, setExpanded] = React.useState(false)
+    const shortItems = courseDescription.slice(0, 6)
+    const visibleItems = expanded ? courseDescription : shortItems
+
+    return (
+        <>
+            <Box sx={{
+                position: 'relative',
+                overflow: 'hidden',
+                transition: 'max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
+            }}>
+                {visibleItems.map((item: any, j: number) => (
+                    typeof item === 'string' ? (
+                        <Typography key={j} sx={{ fontFamily: '"Lato", sans-serif', fontSize: '1.08rem', color: 'rgba(248,245,238,0.85)', lineHeight: 2.0, mb: 2 }}>
+                            {item}
+                        </Typography>
+                    ) : (
+                        <Typography key={j} sx={{ fontFamily: '"Lato", sans-serif', fontSize: '1.08rem', color: 'rgba(248,245,238,0.85)', lineHeight: 2.0, mb: 2 }}>
+                            <Box component="span" sx={{
+                                fontFamily: '"Cinzel", serif',
+                                fontSize: '1rem',
+                                fontWeight: 700,
+                                background: 'linear-gradient(90deg, #C9A84C 0%, #F5D78E 25%, #0d3d7a 50%, #F5D78E 75%, #C9A84C 100%)',
+                                backgroundSize: '200% auto',
+                                WebkitBackgroundClip: 'text',
+                                WebkitTextFillColor: 'transparent',
+                                backgroundClip: 'text',
+                                animation: `${shimmer} 3s linear ${j * 0.3}s infinite`,
+                                letterSpacing: '0.08em',
+                            }}>
+                                {item.caps}
+                            </Box>
+                            {item.rest}
+                        </Typography>
+                    )
+                ))}
+
+                {/* Градиент-затухание когда свёрнуто */}
+                {!expanded && (
+                    <Box sx={{
+                        position: 'absolute', bottom: 0, left: 0, right: 0, height: '80px',
+                        background: 'linear-gradient(to bottom, transparent, #162D4E)',
+                        pointerEvents: 'none',
+                    }} />
+                )}
+            </Box>
+
+            {/* Кнопка раскрыть/свернуть */}
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2, mb: 2 }}>
+                <Box
+                    onClick={() => setExpanded(!expanded)}
+                    sx={{
+                        display: 'inline-flex', alignItems: 'center', gap: 1,
+                        cursor: 'pointer', color: '#C9A84C',
+                        fontFamily: '"Cinzel", serif', fontSize: '0.8rem',
+                        letterSpacing: '0.2em', textTransform: 'uppercase',
+                        borderBottom: '1px solid rgba(201,168,76,0.4)',
+                        pb: 0.3, transition: 'all 0.2s ease',
+                        '&:hover': { color: '#F5D78E', borderBottomColor: '#F5D78E' },
+                    }}
+                >
+                    {expanded ? '▲ Свернуть' : '▼ Читать подробнее'}
+                </Box>
+            </Box>
+
+            {/* Кнопка просмотра страниц */}
+            <Box sx={{ mt: 2, pt: 3, borderTop: '1px solid rgba(201,168,76,0.2)', display: 'flex', justifyContent: 'center' }}>
+                <Box
+                    onClick={() => { setCurrentPage(0); setPagesOpen(true); }}
+                    sx={{
+                        display: 'inline-block', position: 'relative',
+                        bgcolor: '#1B5FA8', px: 5, py: 2.5,
+                        cursor: 'pointer', transition: 'background-color 0.3s ease',
+                        overflow: 'hidden',
+                        boxShadow: '0 0 0 1.5px rgba(27,95,168,0.9), 0 0 6px 1px rgba(27,95,168,0.5)',
+                        animation: `${glowPulse} 2.5s ease-in-out infinite`,
+                        '&:hover': { bgcolor: '#2272C3' },
+                    }}
+                >
+                    <MeanderBorder color="%23C9A84C" />
+                    <Box sx={{ textAlign: 'center', px: 1, py: 0.5 }}>
+                        <Typography sx={{ fontFamily: '"Cinzel", serif', fontSize: '1.25rem', letterSpacing: '0.2em', color: '#C9A84C', fontWeight: 600 }}>
+                            📖 Просмотр страниц книги
+                        </Typography>
+                    </Box>
+                </Box>
+            </Box>
+        </>
+    )
+}
+
+const SectionTitle = () => {
+    const [visible, setVisible] = React.useState(false)
+    const ref = React.useRef<HTMLDivElement>(null)
+
+    React.useEffect(() => {
+        const el = ref.current
+        if (!el) return
+        const observer = new IntersectionObserver(
+            ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect() } },
+            { threshold: 0.4 }
+        )
+        observer.observe(el)
+        return () => observer.disconnect()
+    }, [])
+
+    return (
+        <Box ref={ref} sx={{ textAlign: 'center', mb: 4 }}>
+            {/* Строка 1 */}
+            <Typography
+                variant="overline"
+                sx={{
+                    display: 'block',
+                    color: '#C9A84C',
+                    letterSpacing: '0.3em',
+                    fontFamily: '"Cinzel", serif',
+                    fontSize: '0.95rem',
+                    opacity: visible ? 1 : 0,
+                    transform: visible ? 'translateY(0)' : 'translateY(10px)',
+                    transition: 'opacity 0.6s ease, transform 0.6s ease',
+                }}
+            >
+                Что мы предлагаем
+            </Typography>
+
+            {/* Строка 2 — рукописная анимация при скролле */}
+            <Box sx={{ position: 'relative', display: 'inline-block', overflow: 'visible', mt: 1 }}>
+                <Typography
+                    variant="h3"
+                    sx={{
+                        color: '#0B1F3A',
+                        fontFamily: '"Cormorant Garamond", serif',
+                        fontWeight: 700,
+                        fontStyle: 'italic',
+                        fontSize: { xs: '2.2rem', md: '3.2rem' },
+                        display: 'block',
+                        clipPath: visible ? 'inset(0 0% 0 0)' : 'inset(0 100% 0 0)',
+                        transition: visible ? 'clip-path 1.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s' : 'none',
+                    }}
+                >
+                    О нашем курсе:
+                </Typography>
+                {/* Точка-перо */}
+                <Box sx={{
+                    position: 'absolute', top: '50%', left: 0,
+                    width: '6px', height: '6px', borderRadius: '50%',
+                    bgcolor: '#0B1F3A', transform: 'translateY(-50%)',
+                    boxShadow: '0 0 10px #0B1F3A, 0 0 20px #0B1F3A',
+                    opacity: visible ? 1 : 0,
+                    animation: visible ? `${penDot} 1.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both` : 'none',
+                    zIndex: 10,
+                }} />
+                {/* Курсор */}
+                <Box sx={{
+                    position: 'absolute', right: '-4px', bottom: '8px',
+                    width: '2px', height: '0.9em', bgcolor: '#0B1F3A', opacity: 0,
+                    animation: visible ? `${writeLeft} 0.01s linear 1.75s forwards, ${penBlink} 0.8s step-end 1.8s 4` : 'none',
+                }} />
+                {/* Подчёркивание */}
+                <Box sx={{
+                    position: 'absolute', bottom: '-4px', left: 0, height: '2px',
+                    background: 'linear-gradient(90deg, #C9A84C, #C9A84CCC, #C9A84C40)',
+                    borderRadius: '1px',
+                    width: 0,
+                    animation: visible ? `${drawLine} 0.8s ease-out 1.6s forwards` : 'none',
+                }} />
+            </Box>
+        </Box>
+    )
+}
+
+const TestimonialsTitle = () => {
+    const [visible, setVisible] = React.useState(false)
+    const ref = React.useRef<HTMLDivElement>(null)
+
+    React.useEffect(() => {
+        const el = ref.current
+        if (!el) return
+        const observer = new IntersectionObserver(
+            ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect() } },
+            { threshold: 0.4 }
+        )
+        observer.observe(el)
+        return () => observer.disconnect()
+    }, [])
+
+    return (
+        <Box ref={ref} sx={{ textAlign: 'center', mb: 8 }}>
+            {/* Рукописная анимация */}
+            <Box sx={{ position: 'relative', display: 'inline-block', overflow: 'visible', mt: 1 }}>
+                <Typography
+                    variant="h3"
+                    sx={{
+                        color: '#0B1F3A',
+                        fontFamily: '"Cormorant Garamond", serif',
+                        fontWeight: 700,
+                        fontStyle: 'italic',
+                        fontSize: { xs: '2.2rem', md: '3.2rem' },
+                        display: 'block',
+                        clipPath: visible ? 'inset(0 0% 0 0)' : 'inset(0 100% 0 0)',
+                        transition: visible ? 'clip-path 1.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s' : 'none',
+                    }}
+                >
+                    Отзывы учеников
+                </Typography>
+                <Box sx={{
+                    position: 'absolute', top: '50%', left: 0,
+                    width: '6px', height: '6px', borderRadius: '50%',
+                    bgcolor: '#0B1F3A', transform: 'translateY(-50%)',
+                    boxShadow: '0 0 10px #0B1F3A, 0 0 20px #0B1F3A',
+                    opacity: visible ? 1 : 0,
+                    animation: visible ? `${penDot} 1.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both` : 'none',
+                    zIndex: 10,
+                }} />
+                <Box sx={{
+                    position: 'absolute', right: '-4px', bottom: '8px',
+                    width: '2px', height: '0.9em', bgcolor: '#0B1F3A', opacity: 0,
+                    animation: visible ? `${writeLeft} 0.01s linear 1.75s forwards, ${penBlink} 0.8s step-end 1.8s 4` : 'none',
+                }} />
+                <Box sx={{
+                    position: 'absolute', bottom: '-4px', left: 0, height: '2px',
+                    background: 'linear-gradient(90deg, #C9A84C, #C9A84CCC, #C9A84C40)',
+                    borderRadius: '1px',
+                    width: 0,
+                    animation: visible ? `${drawLine} 0.8s ease-out 1.6s forwards` : 'none',
+                }} />
+            </Box>
+        </Box>
+    )
+}
+
 const HomePage = () => {
     const [pagesOpen, setPagesOpen] = React.useState(false)
     const [currentPage, setCurrentPage] = React.useState(0)
-    const [zoomed, setZoomed] = React.useState(false)
+    // ✅ ИСПРАВЛЕНО: убран неиспользуемый `zoomed`
     const [scale, setScale] = React.useState(1)
     const [dragging, setDragging] = React.useState(false)
     const [dragStart, setDragStart] = React.useState({ x: 0, y: 0 })
@@ -316,8 +589,7 @@ const HomePage = () => {
         setScale(s => {
             const next = e.deltaY < 0 ? s + 0.1 : s - 0.1
             const clamped = Math.min(5, Math.max(0.5, next))
-            if (clamped <= 1) { setZoomed(false); setDragMode(false) }
-            else setZoomed(true)
+            if (clamped <= 1) { setDragMode(false) }
             return clamped
         })
     }, [])
@@ -349,78 +621,56 @@ const HomePage = () => {
                                     Откройте мир, где каждое слово несёт в себе тысячелетия.
                                     Изучайте греческий — язык Гомера и Платона, язык моря и солнца.
                                 </Typography>
+
+                                {/* БОЛЬШАЯ КНОПКА КУПИТЬ */}
                                 <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', opacity: 0, animation: `${slideUp} 0.8s ease 4.8s forwards` }}>
-                                    {/* Кнопка с анимированным греческим меандром */}
                                     <Box
                                         component={Link}
-                                        to="/books"
+                                        to="/purchase"
                                         sx={{
                                             display: 'inline-block',
                                             textDecoration: 'none',
                                             position: 'relative',
-                                            bgcolor: '#0B1F3A',
+                                            bgcolor: '#1B5FA8',
                                             px: 5, py: 2.5,
                                             cursor: 'pointer',
-                                            transition: 'all 0.3s ease',
+                                            transition: 'background-color 0.3s ease',
                                             overflow: 'hidden',
-                                            '&:hover': { bgcolor: '#1B3A6A', boxShadow: '0 4px 24px rgba(201,168,76,0.3)' },
+                                            overflow: 'hidden',
+                                            boxShadow: '0 0 0 1.5px rgba(27,95,168,0.9), 0 0 6px 1px rgba(27,95,168,0.5)',
+                                            animation: `${glowPulse} 2.5s ease-in-out 5.5s infinite`,
+                                            '&:hover': { bgcolor: '#2272C3' },
                                         }}
                                     >
-                                        {/* Меандр СВЕРХУ */}
-                                        <Box sx={{
-                                            position: 'absolute', top: 0, left: 0, right: 0, height: '8px',
-                                            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='14' viewBox='0 0 40 14'%3E%3Crect x='0' y='0' width='14' height='2' fill='%23C9A84C'/%3E%3Crect x='0' y='0' width='2' height='14' fill='%23C9A84C'/%3E%3Crect x='0' y='12' width='10' height='2' fill='%23C9A84C'/%3E%3Crect x='8' y='4' width='2' height='10' fill='%23C9A84C'/%3E%3Crect x='4' y='4' width='6' height='2' fill='%23C9A84C'/%3E%3Crect x='4' y='4' width='2' height='6' fill='%23C9A84C'/%3E%3Crect x='12' y='6' width='8' height='2' fill='%23C9A84C'/%3E%3Crect x='20' y='0' width='14' height='2' fill='%23C9A84C'/%3E%3Crect x='20' y='0' width='2' height='14' fill='%23C9A84C'/%3E%3Crect x='20' y='12' width='10' height='2' fill='%23C9A84C'/%3E%3Crect x='28' y='4' width='2' height='10' fill='%23C9A84C'/%3E%3Crect x='24' y='4' width='6' height='2' fill='%23C9A84C'/%3E%3Crect x='24' y='4' width='2' height='6' fill='%23C9A84C'/%3E%3Crect x='32' y='6' width='8' height='2' fill='%23C9A84C'/%3E%3C/svg%3E")`,
-                                            backgroundRepeat: 'repeat-x',
-                                            backgroundSize: '20px 8px',
-                                        }} />
-                                        {/* Меандр СНИЗУ */}
-                                        <Box sx={{
-                                            position: 'absolute', bottom: 0, left: 0, right: 0, height: '8px',
-                                            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='14' viewBox='0 0 40 14'%3E%3Crect x='0' y='12' width='14' height='2' fill='%23C9A84C'/%3E%3Crect x='0' y='0' width='2' height='14' fill='%23C9A84C'/%3E%3Crect x='0' y='0' width='10' height='2' fill='%23C9A84C'/%3E%3Crect x='8' y='0' width='2' height='10' fill='%23C9A84C'/%3E%3Crect x='4' y='8' width='6' height='2' fill='%23C9A84C'/%3E%3Crect x='4' y='4' width='2' height='6' fill='%23C9A84C'/%3E%3Crect x='12' y='6' width='8' height='2' fill='%23C9A84C'/%3E%3Crect x='20' y='12' width='14' height='2' fill='%23C9A84C'/%3E%3Crect x='20' y='0' width='2' height='14' fill='%23C9A84C'/%3E%3Crect x='20' y='0' width='10' height='2' fill='%23C9A84C'/%3E%3Crect x='28' y='0' width='2' height='10' fill='%23C9A84C'/%3E%3Crect x='24' y='8' width='6' height='2' fill='%23C9A84C'/%3E%3Crect x='24' y='4' width='2' height='6' fill='%23C9A84C'/%3E%3Crect x='32' y='6' width='8' height='2' fill='%23C9A84C'/%3E%3C/svg%3E")`,
-                                            backgroundRepeat: 'repeat-x',
-                                            backgroundSize: '20px 8px',
-                                        }} />
-                                        {/* Меандр СЛЕВА */}
-                                        <Box sx={{
-                                            position: 'absolute', left: 0, top: 0, bottom: 0, width: '8px',
-                                            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='40' viewBox='0 0 14 40'%3E%3Crect x='0' y='0' width='2' height='14' fill='%23C9A84C'/%3E%3Crect x='0' y='0' width='14' height='2' fill='%23C9A84C'/%3E%3Crect x='12' y='0' width='2' height='10' fill='%23C9A84C'/%3E%3Crect x='4' y='8' width='10' height='2' fill='%23C9A84C'/%3E%3Crect x='4' y='4' width='2' height='6' fill='%23C9A84C'/%3E%3Crect x='4' y='4' width='6' height='2' fill='%23C9A84C'/%3E%3Crect x='6' y='12' width='2' height='8' fill='%23C9A84C'/%3E%3Crect x='0' y='20' width='2' height='14' fill='%23C9A84C'/%3E%3Crect x='0' y='20' width='14' height='2' fill='%23C9A84C'/%3E%3Crect x='12' y='20' width='2' height='10' fill='%23C9A84C'/%3E%3Crect x='4' y='28' width='10' height='2' fill='%23C9A84C'/%3E%3Crect x='4' y='24' width='2' height='6' fill='%23C9A84C'/%3E%3Crect x='4' y='24' width='6' height='2' fill='%23C9A84C'/%3E%3Crect x='6' y='32' width='2' height='8' fill='%23C9A84C'/%3E%3C/svg%3E")`,
-                                            backgroundRepeat: 'repeat-y',
-                                            backgroundSize: '8px 20px',
-                                        }} />
-                                        {/* Меандр СПРАВА */}
-                                        <Box sx={{
-                                            position: 'absolute', right: 0, top: 0, bottom: 0, width: '8px',
-                                            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='40' viewBox='0 0 14 40'%3E%3Crect x='0' y='0' width='2' height='14' fill='%23C9A84C'/%3E%3Crect x='0' y='0' width='14' height='2' fill='%23C9A84C'/%3E%3Crect x='12' y='0' width='2' height='10' fill='%23C9A84C'/%3E%3Crect x='4' y='8' width='10' height='2' fill='%23C9A84C'/%3E%3Crect x='4' y='4' width='2' height='6' fill='%23C9A84C'/%3E%3Crect x='4' y='4' width='6' height='2' fill='%23C9A84C'/%3E%3Crect x='6' y='12' width='2' height='8' fill='%23C9A84C'/%3E%3Crect x='0' y='20' width='2' height='14' fill='%23C9A84C'/%3E%3Crect x='0' y='20' width='14' height='2' fill='%23C9A84C'/%3E%3Crect x='12' y='20' width='2' height='10' fill='%23C9A84C'/%3E%3Crect x='4' y='28' width='10' height='2' fill='%23C9A84C'/%3E%3Crect x='4' y='24' width='2' height='6' fill='%23C9A84C'/%3E%3Crect x='4' y='24' width='6' height='2' fill='%23C9A84C'/%3E%3Crect x='6' y='32' width='2' height='8' fill='%23C9A84C'/%3E%3C/svg%3E")`,
-                                            backgroundRepeat: 'repeat-y',
-                                            backgroundSize: '8px 20px',
-                                        }} />
-            {/*-------------------------------Текст кнопки----------*/}
-
+                                        <MeanderBorder color="%23C9A84C" />
                                         <Box sx={{ textAlign: 'center', px: 1, py: 0.5 }}>
-                                            <Typography sx={{
-                                                fontFamily: '"Cinzel", serif',
-                                                fontSize: '1.2rem', letterSpacing: '0.3em',
-                                                color: '#C9A84C', mb: 0.5,
-                                            }}>✦ КУПИТЬ ✦</Typography>
+                                            <Typography sx={{ fontFamily: '"Cinzel", serif', fontSize: '1.2rem', letterSpacing: '0.3em', color: '#C9A84C', mb: 0.5 }}>✦ КУПИТЬ ✦</Typography>
                                             <Typography sx={{
                                                 fontFamily: '"Cormorant Garamond", serif',
-                                                fontSize: '2.2rem', fontWeight: 700,
-                                                color: '#F8F5EE', lineHeight: 1.3,
+                                                fontSize: '2.2rem', fontWeight: 700, lineHeight: 1.3,
+                                                background: 'linear-gradient(90deg, #F8F5EE 0%, #F8F5EE 35%, #C9A84C 48%, #FFF8DC 50%, #C9A84C 52%, #F8F5EE 65%, #F8F5EE 100%)',
+                                                backgroundSize: '300% auto',
+                                                WebkitBackgroundClip: 'text',
+                                                WebkitTextFillColor: 'transparent',
+                                                backgroundClip: 'text',
+                                                animation: `${shimmerSlow} 14s linear 5.5s infinite`,
                                             }}>Интенсивный курс</Typography>
                                             <Typography sx={{
                                                 fontFamily: '"Cormorant Garamond", serif',
-                                                fontSize: '2rem', fontStyle: 'italic',
-                                                color: '#F8F5EE', lineHeight: 1.3,
+                                                fontSize: '2rem', fontStyle: 'italic', lineHeight: 1.3,
+                                                background: 'linear-gradient(90deg, #F8F5EE 0%, #F8F5EE 35%, #C9A84C 48%, #FFF8DC 50%, #C9A84C 52%, #F8F5EE 65%, #F8F5EE 100%)',
+                                                backgroundSize: '300% auto',
+                                                WebkitBackgroundClip: 'text',
+                                                WebkitTextFillColor: 'transparent',
+                                                backgroundClip: 'text',
+                                                animation: `${shimmerSlow} 14s linear 6s infinite`,
                                             }}>«Греческий за 45 дней»</Typography>
-                                            <Typography sx={{
-                                                fontFamily: '"Cinzel", serif',
-                                                fontSize: '1.2rem', letterSpacing: '0.2em',
-                                                color: '#C9A84C', mt: 0.5,
-                                            }}>УРОВНИ А1 · А2</Typography>
+                                            <Typography sx={{ fontFamily: '"Cinzel", serif', fontSize: '1.2rem', letterSpacing: '0.2em', color: '#C9A84C', mt: 0.5 }}>УРОВНИ А1 · А2</Typography>
                                         </Box>
                                     </Box>
                                 </Box>
-                                {/*-------------STUDENTS------*/}
+
+                                {/* STUDENTS */}
                                 <Box sx={{ display: 'flex', gap: 5, mt: 7, pt: 4, borderTop: '1px solid rgba(201,168,76,0.3)', opacity: 0, animation: `${slideUp} 0.8s ease 5.1s forwards` }}>
                                     {[{ n: '2 400+', label: 'Учеников' }, { n: '48', label: 'Курсов' }, { n: '18', label: 'Лет опыта' }].map(s => (
                                         <Box key={s.label}>
@@ -434,8 +684,6 @@ const HomePage = () => {
                     </Grid>
                 </Container>
                 <Box sx={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 3, background: 'linear-gradient(90deg, transparent, #C9A84C 30%, #C9A84C 70%, transparent)' }} />
-
-                {/* ВИДЕО */}
                 <HeroVideo />
             </Box>
 
@@ -443,16 +691,21 @@ const HomePage = () => {
 
             {/* QUOTE BAND */}
             <Box sx={{ bgcolor: '#0B1F3A', py: 5, textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
-                <Box sx={{ position: 'absolute', inset: 0, backgroundImage: `radial-gradient(circle, rgba(201,168,76,0.07) 1px, transparent 1px)`, backgroundSize: '24px 24px' }} />
-                <Container maxWidth="md" sx={{ position: 'relative' }}>
+                {/* Фото Прометея из видео */}
+                <Box
+                    component="img"
+                    src="/assets/prometey.jpg"
+                    alt="Прометей"
+                    sx={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', zIndex: 0, opacity: 0.45 }}
+                />
+                {/* Затемняющий оверлей */}
+                <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(11,31,58,0.6) 0%, rgba(6,14,28,0.7) 100%)', zIndex: 1 }} />
+                <Box sx={{ position: 'absolute', inset: 0, backgroundImage: `radial-gradient(circle, rgba(201,168,76,0.07) 1px, transparent 1px)`, backgroundSize: '24px 24px', zIndex: 2 }} />
+                <Container maxWidth="md" sx={{ position: 'relative', zIndex: 3 }}>
                     <Typography sx={{ color: 'rgba(201,168,76,0.4)', fontSize: '0.8rem', letterSpacing: '0.4em', mb: 2 }}>✦ ✦ ✦</Typography>
-
-                    {/* Греческий оригинал */}
                     <Typography sx={{ fontFamily: '"Cormorant Garamond", serif', fontSize: { xs: '1.6rem', md: '2.4rem' }, fontStyle: 'italic', color: '#C9A84C', letterSpacing: '0.05em', lineHeight: 1.4, mb: 2 }}>
                         «Ἓν οἶδα ὅτι οὐδὲν οἶδα»
                     </Typography>
-
-                    {/* Перевод */}
                     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2, flexWrap: 'wrap', mb: 1.5 }}>
                         <Box sx={{ width: 40, height: '1px', bgcolor: 'rgba(201,168,76,0.35)' }} />
                         <Typography sx={{ fontFamily: '"Cormorant Garamond", serif', fontSize: { xs: '1.05rem', md: '1.35rem' }, fontStyle: 'italic', color: 'rgba(248,245,238,0.8)' }}>
@@ -460,12 +713,9 @@ const HomePage = () => {
                         </Typography>
                         <Box sx={{ width: 40, height: '1px', bgcolor: 'rgba(201,168,76,0.35)' }} />
                     </Box>
-
-                    {/* Автор */}
                     <Typography sx={{ fontFamily: '"Cinzel", serif', fontSize: '0.65rem', color: 'rgba(201,168,76,0.55)', letterSpacing: '0.25em', textTransform: 'uppercase', mt: 1.5 }}>
                         Σωκράτης · Сократ · 470–399 до н.э.
                     </Typography>
-
                     <Typography sx={{ color: 'rgba(201,168,76,0.4)', fontSize: '0.8rem', letterSpacing: '0.4em', mt: 2 }}>✦ ✦ ✦</Typography>
                 </Container>
             </Box>
@@ -474,22 +724,10 @@ const HomePage = () => {
             <Box sx={{ py: { xs: 8, md: 12 }, bgcolor: '#F8F5EE', overflow: 'visible', overflowX: 'clip', position: 'relative' }}>
                 <Container maxWidth="lg" sx={{ overflow: 'visible', position: 'relative' }}>
                     <Box sx={{ position: 'relative', mb: 4, overflow: 'visible' }}>
+                        <SectionTitle />
 
-                        {/* Заголовок */}
-                        <Box sx={{ textAlign: 'center', mb: 4 }}>
-                            <Typography variant="overline" sx={{ color: '#C9A84C', letterSpacing: '0.25em', fontFamily: '"Cinzel", serif', fontSize: '0.7rem' }}>
-                                Что мы предлагаем
-                            </Typography>
-                            <Typography variant="h3" sx={{ color: '#0B1F3A', fontFamily: '"Cormorant Garamond", serif', fontWeight: 600, fontSize: { xs: '2rem', md: '3rem' }, mt: 1 }}>
-                                О курсе:
-                            </Typography>
-                        </Box>
-
-                        {/* ПРАВАЯ ВЕТКА */}
                         <Box component="img" src="/assets/olive.jpg" alt="" sx={{ position: 'absolute', right: { xs: -232, md: -312, lg: -352 }, top: 'calc(50% + 38px)', transform: 'translateY(-50%) scaleX(-1) rotate(5deg)', width: { xs: 140, md: 200, lg: 240 }, height: 'auto', pointerEvents: 'none', zIndex: 10, mixBlendMode: 'multiply', transformOrigin: 'left center', opacity: 0, animation: `${fadeInBranchRight} 1s ease 0.4s forwards, ${floatRight} 5s ease-in-out 1.4s infinite` }} />
-                        {/* ЛЕВАЯ ВЕТКА */}
                         <Box component="img" src="/assets/olive.jpg" alt="" sx={{ position: 'absolute', left: { xs: -4, md: -84, lg: -124 }, top: 'calc(50% + 20px)', transform: 'translateY(-50%) rotate(8deg) scale(0.75)', width: { xs: 140, md: 200, lg: 240 }, height: 'auto', pointerEvents: 'none', zIndex: 9, mixBlendMode: 'multiply', transformOrigin: 'right center', opacity: 0, animation: `${fadeInBranch} 1s ease 0.6s forwards, ${floatLeft} 6s ease-in-out 1.6s infinite` }} />
-                        {/* ДОПОЛНИТЕЛЬНАЯ ПРАВАЯ ВЕТКА */}
                         <Box component="img" src="/assets/olive.jpg" alt="" sx={{ position: 'absolute', right: { xs: -202, md: -272, lg: -312 }, top: 'calc(50% - 22px)', transform: 'translateY(-50%) scaleX(-1) rotate(8deg) scale(0.75)', width: { xs: 140, md: 200, lg: 240 }, height: 'auto', pointerEvents: 'none', zIndex: 9, mixBlendMode: 'multiply', transformOrigin: 'left center', opacity: 0, animation: `${fadeInBranchRight} 1s ease 0.8s forwards, ${floatRight} 6s ease-in-out 1.8s infinite` }} />
 
                         <Box sx={{ display: { xs: 'none', lg: 'block' }, position: 'absolute', top: -60, right: -20, width: 280, height: 210, zIndex: 10 }}>
@@ -497,97 +735,23 @@ const HomePage = () => {
                         </Box>
                     </Box>
 
-                    {/* Карточка с текстом + статуи по бокам */}
                     <Box sx={{ mt: 4, position: 'relative' }}>
-                        {/* СТАТУЯ СЛЕВА */}
-                        <Box
-                            component="img"
-                            src="/assets/stature2.png"
-                            alt=""
-                            sx={{
-                                position: 'absolute',
-                                left: { xs: -40, md: -80, lg: -100 },
-                                bottom: 0,
-                                height: { xs: '300px', md: '440px', lg: '520px' },
-                                width: 'auto',
-                                opacity: 0.95,
-                                pointerEvents: 'none',
-                                userSelect: 'none',
-                                zIndex: 5,
-                                filter: 'drop-shadow(0 12px 28px rgba(11,31,58,0.15))',
-                            }}
-                        />
-
-                        {/* СТАТУЯ СПРАВА (зеркальная) */}
-                        <Box
-                            component="img"
-                            src="/assets/stature2.png"
-                            alt=""
-                            sx={{
-                                position: 'absolute',
-                                right: { xs: -40, md: -80, lg: -100 },
-                                bottom: 0,
-                                height: { xs: '300px', md: '440px', lg: '520px' },
-                                width: 'auto',
-                                opacity: 0.95,
-                                pointerEvents: 'none',
-                                userSelect: 'none',
-                                zIndex: 5,
-                                transform: 'scaleX(-1)',
-                                filter: 'drop-shadow(0 12px 28px rgba(11,31,58,0.15))',
-                            }}
-                        />
+                        <Box component="img" src="/assets/stature2.png" alt="" sx={{ position: 'absolute', left: { xs: -40, md: -120, lg: -160 }, bottom: 0, height: { xs: '300px', md: '440px', lg: '520px' }, width: 'auto', opacity: 0.95, pointerEvents: 'none', userSelect: 'none', zIndex: 5, filter: 'drop-shadow(0 12px 28px rgba(11,31,58,0.15))' }} />
+                        <Box component="img" src="/assets/stature2.png" alt="" sx={{ position: 'absolute', right: { xs: -40, md: -120, lg: -160 }, bottom: 0, height: { xs: '300px', md: '440px', lg: '520px' }, width: 'auto', opacity: 0.95, pointerEvents: 'none', userSelect: 'none', zIndex: 5, transform: 'scaleX(-1)', filter: 'drop-shadow(0 12px 28px rgba(11,31,58,0.15))' }} />
 
                         <Grid container spacing={3} justifyContent="center">
                             {features.map((f) => (
                                 <Grid key={f.title} size={{ xs: 12, md: 10 }} sx={{ mx: 'auto' }}>
-                                    <Card sx={{ height: '100%', border: '1px solid rgba(201,168,76,0.25)', borderTop: '3px solid #C9A84C', bgcolor: '#FFFFFF', p: 1, transition: 'all 0.3s ease', '&:hover': { borderTopColor: '#1B8FE0', transform: 'translateY(-4px)', boxShadow: '0 12px 40px rgba(27,143,224,0.12)' } }}>
+                                    <Card sx={{ height: '100%', border: '1px solid rgba(201,168,76,0.25)', borderTop: '3px solid #C9A84C', bgcolor: '#162D4E', p: 1, transition: 'all 0.3s ease', '&:hover': { borderTopColor: '#1B8FE0', transform: 'translateY(-4px)', boxShadow: '0 12px 40px rgba(27,143,224,0.12)' } }}>
                                         <CardContent sx={{ p: 4 }}>
-                                            {courseDescription.map((item, j) => (
-                                                typeof item === 'string' ? (
-                                                    <Typography key={j} sx={{ fontFamily: '"Lato", sans-serif', fontSize: '1.08rem', color: '#3A5A82', lineHeight: 2.0, mb: 2 }}>
-                                                        {item}
-                                                    </Typography>
-                                                ) : (
-                                                    <Typography key={j} sx={{ fontFamily: '"Lato", sans-serif', fontSize: '1.08rem', color: '#3A5A82', lineHeight: 2.0, mb: 2 }}>
-                                                        <Box component="span" sx={{
-                                                            fontFamily: '"Cinzel", serif',
-                                                            fontSize: '1rem',
-                                                            fontWeight: 700,
-                                                            background: 'linear-gradient(90deg, #C9A84C 0%, #F5D78E 25%, #0d3d7a 50%, #F5D78E 75%, #C9A84C 100%)',
-                                                            backgroundSize: '200% auto',
-                                                            WebkitBackgroundClip: 'text',
-                                                            WebkitTextFillColor: 'transparent',
-                                                            backgroundClip: 'text',
-                                                            animation: `${shimmer} 3s linear ${j * 0.3}s infinite`,
-                                                            letterSpacing: '0.08em',
-                                                        }}>
-                                                            {item.caps}
-                                                        </Box>
-                                                        {item.rest}
-                                                    </Typography>
-                                                )
-                                            ))}
-                                            {/* Кнопка просмотра страниц */}
-                                            <Box sx={{ mt: 4, pt: 3, borderTop: '1px solid rgba(201,168,76,0.2)', display: 'flex', justifyContent: 'center' }}>
-                                                <Button
-                                                    variant="outlined"
-                                                    onClick={() => { setCurrentPage(0); setPagesOpen(true); }}
-                                                    sx={{
-                                                        borderColor: '#C9A84C',
-                                                        color: '#0B1F3A',
-                                                        px: 5, py: 1.6,
-                                                        fontFamily: '"Cinzel", serif',
-                                                        fontSize: '1.1rem',
-                                                        letterSpacing: '0.12em',
-                                                        borderRadius: 0,
-                                                        borderWidth: '1.5px',
-                                                        '&:hover': { bgcolor: 'rgba(201,168,76,0.08)', borderWidth: '1.5px' },
-                                                    }}
-                                                >
-                                                    📖 Просмотр страниц книги
-                                                </Button>
-                                            </Box>
+                                            {/* Сворачиваемый блок */}
+                                            <CourseDescriptionBlock
+                                                shimmer={shimmer}
+                                                courseDescription={courseDescription}
+                                                setCurrentPage={setCurrentPage}
+                                                setPagesOpen={setPagesOpen}
+                                                glowPulse={glowPulse}
+                                            />
                                         </CardContent>
                                     </Card>
                                 </Grid>
@@ -597,7 +761,7 @@ const HomePage = () => {
                 </Container>
             </Box>
 
-            {/* МОДАЛЬНОЕ ОКНО — ПРОСМОТР СТРАНИЦ В СТИЛЕ КНИГИ */}
+            {/* МОДАЛЬНОЕ ОКНО */}
             <Dialog
                 open={pagesOpen}
                 onClose={() => { setPagesOpen(false); setScale(1); setDragMode(false); }}
@@ -606,8 +770,6 @@ const HomePage = () => {
                 PaperProps={{ sx: { bgcolor: '#1a1008', borderRadius: 0, overflow: 'hidden' } }}
             >
                 <DialogContent sx={{ p: 0, display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
-
-                    {/* Верхняя панель */}
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', px: 3, py: 1, bgcolor: 'rgba(0,0,0,0.4)', borderBottom: '1px solid rgba(201,168,76,0.15)', flexShrink: 0 }}>
                         <Typography sx={{ fontFamily: '"Cormorant Garamond", serif', fontSize: '0.9rem', color: 'rgba(201,168,76,0.7)', letterSpacing: '0.15em', fontStyle: 'italic' }}>
                             Зоя Павловская · «Греческий за 45 дней»
@@ -617,7 +779,6 @@ const HomePage = () => {
                         </IconButton>
                     </Box>
 
-                    {/* Книга */}
                     <Box
                         ref={imgContainerRef}
                         sx={{
@@ -646,7 +807,6 @@ const HomePage = () => {
                         onMouseLeave={() => setDragging(false)}
                         onWheel={handleWheel}
                     >
-                        {/* Внешняя обёртка — деревянный переплёт */}
                         <Box sx={{
                             position: 'relative',
                             width: '100%',
@@ -655,7 +815,6 @@ const HomePage = () => {
                             transformOrigin: 'top center',
                             transition: 'transform 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                         }}>
-                            {/* Деревянный фон — чуть больше страниц */}
                             <Box sx={{
                                 position: 'absolute',
                                 inset: '-16px -16px -16px -16px',
@@ -665,7 +824,6 @@ const HomePage = () => {
                                 background: 'linear-gradient(135deg, #8B4513 0%, #6B2E0A 30%, #5C2208 50%, #6B2E0A 70%, #8B4513 100%)',
                             }} />
 
-                            {/* Страницы */}
                             <Box sx={{
                                 position: 'relative',
                                 zIndex: 1,
@@ -678,7 +836,6 @@ const HomePage = () => {
                                 <Box sx={{
                                     position: 'relative',
                                     p: '2em',
-                                    borderRight: { md: 'none' },
                                     minHeight: { xs: 'auto', md: '75vh' },
                                     display: 'flex',
                                     flexDirection: 'column',
@@ -691,14 +848,12 @@ const HomePage = () => {
                                         display: { xs: 'none', md: 'block' },
                                     }
                                 }}>
-                                    {/* Шапка левой страницы */}
                                     <Box sx={{ display: 'flex', justifyContent: 'space-between', pb: '0.5em', mb: '1em', borderBottom: '1px solid #ddd' }}>
                                         <Typography sx={{ fontFamily: '"Playfair Display", "Cormorant Garamond", serif', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#333' }}>
                                             Зоя Павловская
                                         </Typography>
                                     </Box>
 
-                                    {/* Контент левой страницы */}
                                     <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                         {currentPage > 0 ? (
                                             <Box component="img" src={bookPages[currentPage - 1]} alt="" sx={{ maxWidth: '100%', maxHeight: '65vh', objectFit: 'contain', display: 'block', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />
@@ -721,7 +876,6 @@ const HomePage = () => {
                                         )}
                                     </Box>
 
-                                    {/* Номер левой страницы */}
                                     <Box sx={{ display: { xs: 'none', md: 'block' }, pt: '0.5em', mt: '1em', borderTop: '1px solid #ddd' }}>
                                         <Typography sx={{ fontFamily: '"Playfair Display", "Cormorant Garamond", serif', fontSize: '0.75rem', fontWeight: 700, color: '#555' }}>
                                             {currentPage > 0 ? currentPage : ''}
@@ -729,7 +883,7 @@ const HomePage = () => {
                                     </Box>
                                 </Box>
 
-                                {/* Корешок — тень посередине */}
+                                {/* Корешок */}
                                 <Box sx={{
                                     display: { xs: 'none', md: 'block' },
                                     position: 'absolute',
@@ -742,27 +896,23 @@ const HomePage = () => {
                                     pointerEvents: 'none',
                                 }} />
 
-                                {/* Правая страница */}
+                                {/* ✅ ИСПРАВЛЕНО: убрано дублирование display */}
                                 <Box sx={{
                                     p: '2em',
                                     minHeight: { xs: 'auto', md: '75vh' },
-                                    display: 'flex',
                                     flexDirection: 'column',
                                     display: { xs: 'none', md: 'flex' },
                                 }}>
-                                    {/* Шапка правой страницы */}
                                     <Box sx={{ display: 'flex', justifyContent: 'flex-end', pb: '0.5em', mb: '1em', borderBottom: '1px solid #ddd' }}>
                                         <Typography sx={{ fontFamily: '"Playfair Display", "Cormorant Garamond", serif', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#333' }}>
                                             Греческий за 45 дней
                                         </Typography>
                                     </Box>
 
-                                    {/* Контент правой страницы */}
                                     <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                         <Box component="img" src={bookPages[currentPage]} alt={`Страница ${currentPage + 1}`} sx={{ maxWidth: '100%', maxHeight: '65vh', objectFit: 'contain', display: 'block', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />
                                     </Box>
 
-                                    {/* Номер правой страницы */}
                                     <Box sx={{ display: 'flex', justifyContent: 'flex-end', pt: '0.5em', mt: '1em', borderTop: '1px solid #ddd' }}>
                                         <Typography sx={{ fontFamily: '"Playfair Display", "Cormorant Garamond", serif', fontSize: '0.75rem', fontWeight: 700, color: '#555' }}>
                                             {currentPage + 1}
@@ -770,7 +920,7 @@ const HomePage = () => {
                                     </Box>
                                 </Box>
 
-                                {/* Мобильная версия — только текущая страница */}
+                                {/* Мобильная версия */}
                                 <Box sx={{ display: { xs: 'flex', md: 'none' }, p: 2, alignItems: 'center', justifyContent: 'center' }}>
                                     <Box component="img" src={bookPages[currentPage]} alt="" sx={{ maxWidth: '100%', objectFit: 'contain' }} />
                                 </Box>
@@ -811,6 +961,7 @@ const HomePage = () => {
                     </Box>
                 </DialogContent>
             </Dialog>
+
             {/* PHILOSOPHY */}
             <Box sx={{ py: { xs: 8, md: 14 }, bgcolor: '#0B1F3A', position: 'relative', overflow: 'hidden', textAlign: 'center' }}>
                 <Box component="video" autoPlay muted loop playsInline sx={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0, opacity: 0.3 }}>
@@ -834,10 +985,7 @@ const HomePage = () => {
             {/* TESTIMONIALS */}
             <Box sx={{ py: { xs: 8, md: 12 }, bgcolor: '#F8F5EE' }}>
                 <Container maxWidth="lg">
-                    <Box sx={{ textAlign: 'center', mb: 8 }}>
-                        <Typography variant="overline" sx={{ color: '#C9A84C', letterSpacing: '0.25em', fontFamily: '"Cinzel", serif', fontSize: '0.7rem' }}>Отзывы</Typography>
-                        <Typography variant="h3" sx={{ fontFamily: '"Cormorant Garamond", serif', color: '#0B1F3A', fontWeight: 600, fontSize: { xs: '2rem', md: '3rem' }, mt: 1 }}>Голоса учеников</Typography>
-                    </Box>
+                    <TestimonialsTitle />
                     <Grid container spacing={3} justifyContent="center">
                         {testimonials.map(t => (
                             <Grid key={t.name} size={{ xs: 12, md: 4 }}>
@@ -861,16 +1009,41 @@ const HomePage = () => {
                 <Box component="img" src="/assets/olive.jpg" alt="" sx={{ position: 'relative', top: '38px', transform: 'scaleX(-1) rotate(-5deg)', width: { xs: 140, md: 200 }, height: 'auto', mixBlendMode: 'multiply', transformOrigin: 'left center', opacity: 0, animation: `${fadeInBranchRight} 1s ease 0.5s forwards, ${floatRight} 5s ease-in-out 1.5s infinite` }} />
             </Box>
 
-            {/* CTA */}
+            {/* КУПИТЬ КУРС */}
             <Box sx={{ py: { xs: 8, md: 10 }, background: 'linear-gradient(135deg, #0B1F3A 0%, #060E1C 100%)', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
                 <Box sx={{ position: 'absolute', inset: 0, backgroundImage: `radial-gradient(circle, rgba(201,168,76,0.06) 1px, transparent 1px)`, backgroundSize: '28px 28px' }} />
                 <Container maxWidth="sm" sx={{ position: 'relative' }}>
                     <Typography sx={{ color: '#C9A84C', fontSize: '0.75rem', letterSpacing: '0.25em', fontFamily: '"Cinzel", serif', mb: 2, display: 'block', textTransform: 'uppercase' }}>Первый шаг</Typography>
                     <Typography variant="h3" sx={{ color: '#F8F5EE', fontFamily: '"Cormorant Garamond", serif', fontWeight: 600, fontSize: { xs: '2rem', md: '2.8rem' }, mb: 3 }}>Начните сегодня</Typography>
                     <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center' }}>
-                        <Button variant="contained" component={Link} to="/register" sx={{ bgcolor: '#C9A84C', color: '#0B1F3A', px: 5, py: 1.6, fontFamily: '"Cinzel", serif', fontSize: '0.75rem', letterSpacing: '0.15em', borderRadius: 0, fontWeight: 600, '&:hover': { bgcolor: '#DFC078' } }}>
-                           Купить курс
-                        </Button>
+                        <Box
+                            component={Link}
+                            to="/purchase"
+                            sx={{
+                                display: 'inline-block',
+                                textDecoration: 'none',
+                                position: 'relative',
+                                bgcolor: '#C9A84C',
+                                px: 5, py: 2,
+                                cursor: 'pointer',
+                                transition: 'background-color 0.3s ease',
+                                overflow: 'hidden',
+                                boxShadow: '0 0 0 1.5px rgba(27,95,168,0.9), 0 0 6px 1px rgba(27,95,168,0.5)',
+                                animation: `${glowPulse} 2.5s ease-in-out infinite`,
+                                '&:hover': { bgcolor: '#DFC078' },
+                            }}
+                        >
+                            <MeanderBorder color="%230B1F3A" />
+                            <Box sx={{ textAlign: 'center', px: 1, py: 0.5 }}>
+                                <Typography sx={{
+                                    fontFamily: '"Cinzel", serif',
+                                    fontSize: '1rem',
+                                    letterSpacing: '0.25em',
+                                    color: '#0B1F3A',
+                                    fontWeight: 700,
+                                }}>✦ КУПИТЬ КУРС ✦</Typography>
+                            </Box>
+                        </Box>
                     </Box>
                 </Container>
             </Box>
@@ -882,7 +1055,6 @@ const HomePage = () => {
                 <Typography sx={{ fontFamily: '"Cinzel", serif', color: 'rgba(201,168,76,0.6)', fontSize: '1.2rem', letterSpacing: '0.3em' }}>ΕΛΛΗΝΙΚΑ</Typography>
                 <Typography sx={{ fontFamily: '"Lato", sans-serif', color: 'rgba(255,255,255,0.25)', fontSize: '0.7rem', mt: 1, letterSpacing: '0.1em' }}>© 2026 · Все права защищены</Typography>
             </Box>
-
         </Box>
     )
 }

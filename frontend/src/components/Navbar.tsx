@@ -15,22 +15,23 @@ const Navbar = () => {
                     ΕΛΛΗΝΙΚΑ
                 </Typography>
                 <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+                    <Button color="inherit" component={Link} to="/"
+                            sx={{ fontFamily: '"Cinzel", serif', fontSize: '1.05rem', letterSpacing: '0.12em' }}>
+                        Главная
+                    </Button>
                     <Button color="inherit" component={Link} to="/contact"
-                            sx={{ fontFamily: '"Cinzel", serif', fontSize: '0.9rem', letterSpacing: '0.12em' }}>
+                            sx={{ fontFamily: '"Cinzel", serif', fontSize: '1.05rem', letterSpacing: '0.12em' }}>
                         Контакты
                     </Button>
-                    <Button color="inherit" component={Link} to="/login"
-                            sx={{ fontFamily: '"Cinzel", serif', fontSize: '0.9rem', letterSpacing: '0.12em' }}>
-                        Войти
-                    </Button>
-                    <Button variant="outlined" component={Link} to="/register"
+                    {/* ✅ Купить курс → /login, Регистрация убрана */}
+                    <Button variant="outlined" component={Link} to="/login"
                             sx={{
                                 borderColor: '#C9A84C', color: '#C9A84C',
-                                fontFamily: '"Cinzel", serif', fontSize: '0.9rem',
+                                fontFamily: '"Cinzel", serif', fontSize: '1.05rem',
                                 letterSpacing: '0.12em', borderRadius: 0,
                                 '&:hover': { bgcolor: 'rgba(201,168,76,0.1)', borderColor: '#C9A84C' },
                             }}>
-                        Регистрация
+                        Купить курс
                     </Button>
                     <IconButton color="inherit" component={Link} to="/books">
                         <Badge badgeContent={0} color="error">
