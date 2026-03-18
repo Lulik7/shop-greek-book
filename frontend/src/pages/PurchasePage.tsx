@@ -3,6 +3,7 @@ import { Box, Typography, Container, Button, Divider, TextField } from '@mui/mat
 import { keyframes } from '@mui/system'
 import { Link } from 'react-router-dom'
 import emailjs from '@emailjs/browser'
+import { Helmet } from 'react-helmet-async'
 
 const fadeUp = keyframes`
     from { opacity: 0; transform: translateY(20px); }
@@ -35,15 +36,19 @@ const fieldSx = {
 
 const cardBeige = '#EDE0C4'
 
+// Публичные ссылки — не секретные, можно хранить прямо в коде
+const PAYPAL_URL = 'https://www.paypal.com/myaccount/transfer/send'
+const REVOLUT_URL = 'https://revolut.me/zoiaqf34f'
+const PAYPAL_EMAIL = 'zoepavlovska@gmail.com'
+
 const PurchasePage = () => {
-    // Стадии: idle → payment → card_form | success
     const [status, setStatus] = useState<'idle' | 'payment' | 'card_form' | 'success'>('idle')
     const [buyerForm, setBuyerForm] = useState({ name: '', email: '', phone: '' })
     const [formError, setFormError] = useState('')
     const [cardForm, setCardForm] = useState({ name: '', note: '' })
     const [sending, setSending] = useState(false)
+    const [shown, setShown] = useState(false)
 
-    // Шаг 1 — данные покупателя
     const handleFormSubmit = () => {
         setFormError('')
         if (!buyerForm.name) { setFormError('Введите ваше имя'); return }
@@ -51,45 +56,50 @@ const PurchasePage = () => {
         setStatus('payment')
     }
 
-    // Клик PayPal — открываем ссылку и сразу шлём уведомление
     const handlePayPal = async () => {
         await sendNotification('PayPal')
-        // Замените на вашу реальную ссылку PayPal.Me после создания на paypal.me
-        window.open('https://www.paypal.com/paypalme', '_blank')
+        window.open(PAYPAL_URL, '_blank')
         setStatus('success')
     }
 
-    // Клик Revolut
     const handleRevolut = async () => {
         await sendNotification('Revolut')
-        window.open('https://revolut.me/zoiaqf34f', '_blank')
+        window.open(REVOLUT_URL, '_blank')
         setStatus('success')
     }
 
-    // Подтверждение карты
     const handleCardSubmit = async () => {
         await sendNotification('Банковская карта')
         setStatus('success')
     }
 
-    // Отправка уведомления продавцу
+    // Секретные ключи EmailJS — берём из .env
     const sendNotification = async (method: string) => {
         setSending(true)
         try {
-            await emailjs.send('service_kdinmh1', 'template_wn67l1o', {
-                name: buyerForm.name,
-                email: buyerForm.email,
-                message: `Способ оплаты: ${method}\nТелефон: ${buyerForm.phone || 'не указан'}\nСумма: 30 EUR\nКурс: Греческий за 45 дней (А1-А2)`,
-            }, 'Zakagw6uLJmrTN5tM')
+            await emailjs.send(
+                import.meta.env.VITE_EMAILJS_SERVICE_ID,
+                import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+                {
+                    name: buyerForm.name,
+                    email: buyerForm.email,
+                    message: `Способ оплаты: ${method}\nТелефон: ${buyerForm.phone || 'не указан'}\nСумма: 30 EUR\nКурс: Греческий за 45 дней (А1-А2)`,
+                },
+                import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+            )
         } catch (e) { console.error('Email failed:', e) }
         setSending(false)
     }
 
-    // Скрываем карточку курса когда выбран способ оплаты
     const showCourseCard = status === 'idle' || status === 'payment'
 
     return (
         <Box sx={{ minHeight: '100vh', bgcolor: '#162D4E', display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden' }}>
+            <Helmet>
+                <title>Купить курс греческого · Зоя Павловская</title>
+                <meta name="description" content="Купите курс «Греческий за 45 дней» — оплата через PayPal или Revolut. Доступ сразу после оплаты." />
+            </Helmet>
+
             <Box sx={{ position: 'absolute', inset: 0, backgroundImage: meanderPattern, backgroundSize: '40px 40px', opacity: 0.15, pointerEvents: 'none', zIndex: 0 }} />
 
             <Box sx={{ position: 'relative', zIndex: 3, flex: 1, py: 6 }}>
@@ -128,7 +138,7 @@ const PurchasePage = () => {
                     ) : (
                         <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: showCourseCard ? '1fr 1fr' : '1fr' }, gap: 4, alignItems: 'stretch', transition: 'grid-template-columns 0.4s ease' }}>
 
-                            {/* Карточка курса — скрывается при выборе карты */}
+                            {/* Карточка курса */}
                             {showCourseCard && (
                                 <Box>
                                     <Box sx={{ p: 4, bgcolor: cardBeige, border: '2px solid rgba(201,168,76,0.4)', borderTop: '3px solid #C9A84C', animation: `${goldShimmer} 3s ease-in-out infinite`, height: '100%', boxSizing: 'border-box' }}>
@@ -155,7 +165,7 @@ const PurchasePage = () => {
 
                             {/* Правая колонка */}
                             <Box>
-                                {/* Шаг 1 — данные покупателя */}
+                                {/* Шаг 1 */}
                                 {status === 'idle' && (
                                     <Box sx={{ p: 4, bgcolor: cardBeige, border: '2px solid rgba(201,168,76,0.4)', borderTop: '3px solid #C9A84C', animation: `${goldShimmer} 3s ease-in-out infinite`, height: '100%', boxSizing: 'border-box' }}>
                                         <Typography sx={{ fontFamily: '"Cinzel", serif', fontSize: '0.75rem', letterSpacing: '0.25em', color: '#8B6914', mb: 3, textAlign: 'center' }}>
@@ -188,10 +198,9 @@ const PurchasePage = () => {
                                     </Box>
                                 )}
 
-                                {/* Шаг 2 — выбор способа */}
+                                {/* Шаг 2 */}
                                 {status === 'payment' && (
                                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                                        {/* Данные покупателя */}
                                         <Box sx={{ p: 2, bgcolor: 'rgba(237,224,196,0.3)', border: '1px solid rgba(201,168,76,0.3)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                             <Box>
                                                 <Typography sx={{ fontFamily: '"Cinzel", serif', fontSize: '0.6rem', color: '#C9A84C', letterSpacing: '0.15em', mb: 0.3 }}>ПОКУПАТЕЛЬ</Typography>
@@ -219,7 +228,7 @@ const PurchasePage = () => {
                                                     Зайдите в PayPal → Отправить деньги
                                                 </Typography>
                                                 <Typography sx={{ fontFamily: '"Lato", sans-serif', fontSize: '0.85rem', color: '#3A5A82' }}>
-                                                    Аккаунт: <strong style={{ color: '#003087' }}>zoepavlovska@gmail.com</strong>
+                                                    Аккаунт: <strong style={{ color: '#003087' }}>{PAYPAL_EMAIL}</strong>
                                                 </Typography>
                                                 <Typography sx={{ fontFamily: '"Lato", sans-serif', fontSize: '0.85rem', color: '#3A5A82' }}>
                                                     Сумма: <strong>30 EUR</strong>
@@ -256,7 +265,7 @@ const PurchasePage = () => {
                                     </Box>
                                 )}
 
-                                {/* Шаг 3 — форма банковской карты */}
+                                {/* Шаг 3 — банковский перевод */}
                                 {status === 'card_form' && (
                                     <Box sx={{ p: 4, bgcolor: cardBeige, border: '2px solid rgba(201,168,76,0.4)', borderTop: '3px solid #C9A84C', animation: `${goldShimmer} 3s ease-in-out infinite`, maxWidth: 520, mx: 'auto' }}>
                                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
@@ -269,10 +278,12 @@ const PurchasePage = () => {
                                         </Box>
 
                                         <Box sx={{ p: 2.5, mb: 3, bgcolor: 'rgba(255,255,255,0.5)', border: '1px solid rgba(139,105,20,0.2)' }}>
-                                            <Typography sx={{ fontFamily: '"Cinzel", serif', fontSize: '0.8rem', color: '#8B6914', letterSpacing: '0.15em', mb: 1.5 }}>РЕКВИЗИТЫ ДЛЯ ПЕРЕВОДА</Typography>
+                                            <Typography sx={{ fontFamily: '"Cinzel", serif', fontSize: '0.8rem', color: '#8B6914', letterSpacing: '0.15em', mb: 1.5 }}>
+                                                РЕКВИЗИТЫ ДЛЯ ПЕРЕВОДА
+                                            </Typography>
+
                                             {[
                                                 ['Получатель', 'Zoia Pavlovska'],
-                                                ['IBAN', 'LT88 3250 0563 6744 1990'],
                                                 ['Сумма', '30 EUR'],
                                                 ['Назначение', 'Греческий курс А1-А2'],
                                             ].map(([label, value]) => (
@@ -281,6 +292,36 @@ const PurchasePage = () => {
                                                     <Typography sx={{ fontFamily: '"Lato", sans-serif', fontSize: '1rem', color: '#0B1F3A', fontWeight: 800 }}>{value}</Typography>
                                                 </Box>
                                             ))}
+
+                                            {/* IBAN — защищённый */}
+                                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.8 }}>
+                                                <Typography sx={{ fontFamily: '"Lato", sans-serif', fontSize: '1rem', color: '#3A5A82' }}>IBAN:</Typography>
+                                                {shown ? (
+                                                    <Box sx={{ display: 'flex', gap: '5px', userSelect: 'none', pointerEvents: 'none' }}>
+                                                        {['LT88', '3250', '0563', '6744', '1990'].map((part, i) => (
+                                                            <Typography key={i} sx={{ fontFamily: '"Lato", sans-serif', fontSize: '1rem', color: '#0B1F3A', fontWeight: 800 }}>
+                                                                {part}
+                                                            </Typography>
+                                                        ))}
+                                                    </Box>
+                                                ) : (
+                                                    <Box
+                                                        onClick={() => setShown(true)}
+                                                        sx={{
+                                                            cursor: 'pointer',
+                                                            fontFamily: '"Cinzel", serif',
+                                                            fontSize: '0.75rem',
+                                                            color: '#8B6914',
+                                                            letterSpacing: '0.1em',
+                                                            borderBottom: '1px solid rgba(139,105,20,0.4)',
+                                                            pb: 0.2,
+                                                            '&:hover': { color: '#C9A84C' },
+                                                        }}
+                                                    >
+                                                        Показать IBAN
+                                                    </Box>
+                                                )}
+                                            </Box>
                                         </Box>
 
                                         <Typography sx={{ fontFamily: '"Cinzel", serif', fontSize: '0.8rem', letterSpacing: '0.2em', color: '#8B6914', mb: 2 }}>

@@ -4,6 +4,8 @@ import { Box, Typography, Button, Container, Grid, Card, CardContent, Dialog, Di
 import { Link } from 'react-router-dom'
 import { keyframes } from '@mui/system'
 import GreekBook from '../components/GreekBook'
+import { Helmet } from 'react-helmet-async'
+import ShopBanner from '../components/ShopBanner'
 
 const slideUp = keyframes`
     from { transform: translateY(120px); opacity: 0; }
@@ -205,6 +207,13 @@ const GreekQuotesMarquee = () => {
 const HeroVideo = ({ inline = false }: { inline?: boolean }) => {
     const videoRef = React.useRef<HTMLVideoElement>(null)
     const [hovered, setHovered] = React.useState(false)
+
+    React.useEffect(() => {
+        const v = videoRef.current
+        if (!v) return
+        v.load()
+        v.play().catch(() => {})
+    }, [])
 
     const handleEnter = () => {
         setHovered(true)
@@ -584,11 +593,19 @@ const HomePage = () => {
 
     return (
         <Box sx={{ fontFamily: '"Cormorant Garamond", serif', overflowX: 'hidden' }}>
+
+            <Helmet>
+                <title>Греческий за 45 дней · Зоя Павловская | Курс с нуля</title>
+                <meta name="description" content="Интенсивный курс греческого языка для начинающих. Уровни А1–А2, 45 лекций, поддержка преподавателя. Стоимость 30€." />
+                <meta name="keywords" content="греческий язык курс, учить греческий онлайн, греческий за 45 дней, Зоя Павловская" />
+                <meta property="og:title" content="Греческий за 45 дней · Зоя Павловская" />
+                <meta property="og:description" content="Курс греческого с нуля. 45 лекций, видео и аудио материалы, обратная связь с учителем." />
+            </Helmet>
+
             {/* HERO */}
             <Box sx={{ position: 'relative', minHeight: { xs: 'auto', md: '92vh' }, display: 'flex', alignItems: 'center', overflow: 'hidden', bgcolor: '#F8F5EE', pb: { xs: 6, md: 0 } }}>
                 <Box sx={{ position: 'absolute', inset: 0, backgroundImage: meanderPattern, backgroundSize: '40px 40px', opacity: 0.4 }} />
 
-                {/* Санторини: на десктопе справа, на мобиле полупрозрачный фон на всю высоту */}
                 <Box sx={{
                     position: 'absolute',
                     right: 0, top: 0, bottom: 0,
@@ -617,17 +634,23 @@ const HomePage = () => {
                                 </Box>
                                 <Box sx={{ width: 80, height: 2, bgcolor: '#C9A84C', mb: 4, opacity: 0, animation: `${drawLine} 0.6s ease 4.2s forwards` }} />
 
-                                <Typography sx={{ color: '#3A5A82', fontSize: { xs: '1rem', md: '1.15rem' }, lineHeight: 1.9, mb: { xs: 3, md: 5 }, maxWidth: 480, fontFamily: '"Lato", sans-serif', fontWeight: 300, opacity: 0, animation: `${slideUp} 0.8s ease 4.5s forwards` }}>
+                                <Typography sx={{ color: '#3A5A82', fontSize: { xs: '1rem', md: '1.15rem' }, lineHeight: 1.9, mb: { xs: 1, md: 3 }, maxWidth: 480, fontFamily: '"Lato", sans-serif', fontWeight: 300, opacity: 0, animation: `${slideUp} 0.8s ease 4.5s forwards` }}>
                                     Откройте мир, где каждое слово несёт в себе тысячелетия.
                                     Изучайте греческий — язык Гомера и Платона, язык моря и солнца.
+                                    <Box component="span" sx={{ display: { xs: 'none', md: 'block' }, fontFamily: '"Cinzel", serif', fontSize: { md: '2.6rem' }, fontWeight: 900, color: '#1B8FE0', letterSpacing: '0.08em', mt: 1, lineHeight: 1.1 }}>
+                                        С ЗОЕЙ ПАВЛОВСКОЙ
+                                    </Box>
                                 </Typography>
 
                                 {/* Видео — только на мобиле */}
-                                <Box sx={{ display: { xs: 'flex', md: 'none' }, justifyContent: 'center', mb: 3, opacity: 0, animation: `${slideUp} 0.8s ease 4.7s forwards` }}>
+                                <Box sx={{ display: { xs: 'flex', md: 'none' }, flexDirection: 'column', alignItems: 'center', mb: 3, mt: 2, opacity: 0, animation: `${slideUp} 0.8s ease 4.7s forwards` }}>
+                                    <Box component="span" sx={{ fontFamily: '"Cinzel", serif', fontSize: '1.8rem', fontWeight: 900, color: '#1B8FE0', letterSpacing: '0.08em', lineHeight: 1.1, textAlign: 'center', mb: 2 }}>
+                                        С ЗОЕЙ ПАВЛОВСКОЙ
+                                    </Box>
                                     <HeroVideo inline />
                                 </Box>
 
-                                {/* КНОПКА КУПИТЬ — по центру на мобиле */}
+                                {/* КНОПКА КУПИТЬ */}
                                 <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', opacity: 0, animation: `${slideUp} 0.8s ease 4.8s forwards`, justifyContent: { xs: 'center', md: 'flex-start' } }}>
                                     <Box
                                         component={Link}
@@ -736,7 +759,6 @@ const HomePage = () => {
                     </Box>
 
                     <Box sx={{ mt: 4, position: 'relative' }}>
-                        {/* Статуи: на десктопе оригинальный размер, на мобиле/планшете скрыты */}
                         <Box component="img" src="/assets/stature2.png" alt="" sx={{ display: { xs: 'none', md: 'block' }, position: 'absolute', left: { md: -120, lg: -160 }, bottom: 0, height: { md: '440px', lg: '520px' }, width: 'auto', opacity: 0.95, pointerEvents: 'none', userSelect: 'none', zIndex: 5, filter: 'drop-shadow(0 12px 28px rgba(11,31,58,0.15))' }} />
                         <Box component="img" src="/assets/stature2.png" alt="" sx={{ display: { xs: 'none', md: 'block' }, position: 'absolute', right: { md: -120, lg: -160 }, bottom: 0, height: { md: '440px', lg: '520px' }, width: 'auto', opacity: 0.95, pointerEvents: 'none', userSelect: 'none', zIndex: 5, transform: 'scaleX(-1)', filter: 'drop-shadow(0 12px 28px rgba(11,31,58,0.15))' }} />
                         <Grid container spacing={3} justifyContent="center">
@@ -879,7 +901,6 @@ const HomePage = () => {
                                     <Typography sx={{ fontFamily: '"Lato", sans-serif', color: '#0B1F3A', lineHeight: 1.8, mb: 3, fontStyle: 'italic', fontSize: '0.95rem' }}>{t.text}</Typography>
                                     <Box sx={{ borderTop: '1px solid rgba(201,168,76,0.3)', pt: 2 }}>
                                         <Typography sx={{ fontFamily: '"Cinzel", serif', fontSize: '0.75rem', color: '#0B1F3A', letterSpacing: '0.1em' }}>{t.name}</Typography>
-                                        <Typography sx={{ fontFamily: '"Lato", sans-serif', fontSize: '0.7rem', color: '#3A5A82', mt: 0.3 }}>{t.city}</Typography>
                                     </Box>
                                 </Box>
                             </Grid>
@@ -888,7 +909,7 @@ const HomePage = () => {
                 </Container>
             </Box>
 
-            {/* ВЕТКИ — только на десктопе */}
+            {/* ВЕТКИ */}
             <Box sx={{ display: { xs: 'none', md: 'flex' }, position: 'relative', bgcolor: '#F8F5EE', overflow: 'visible', justifyContent: 'center', alignItems: 'center', gap: { md: 16, lg: 24 }, pt: 2, pb: 0, pl: '152px' }}>
                 <Box component="img" src="/assets/olive.jpg" alt="" sx={{ position: 'relative', top: '38px', transform: 'rotate(-5deg)', width: { md: 200 }, height: 'auto', mixBlendMode: 'multiply', transformOrigin: 'right center', opacity: 0, animation: `${fadeInBranch} 1s ease 0.3s forwards, ${floatLeft} 5s ease-in-out 1.3s infinite` }} />
                 <Box component="img" src="/assets/olive.jpg" alt="" sx={{ position: 'relative', top: '38px', transform: 'scaleX(-1) rotate(-5deg)', width: { md: 200 }, height: 'auto', mixBlendMode: 'multiply', transformOrigin: 'left center', opacity: 0, animation: `${fadeInBranchRight} 1s ease 0.5s forwards, ${floatRight} 5s ease-in-out 1.5s infinite` }} />
@@ -918,6 +939,8 @@ const HomePage = () => {
                 <Typography sx={{ fontFamily: '"Cinzel", serif', color: 'rgba(201,168,76,0.6)', fontSize: '1.2rem', letterSpacing: '0.3em' }}>ΕΛΛΗΝΙΚΑ</Typography>
                 <Typography sx={{ fontFamily: '"Lato", sans-serif', color: 'rgba(255,255,255,0.25)', fontSize: '0.7rem', mt: 1, letterSpacing: '0.1em' }}>© 2026 · Все права защищены</Typography>
             </Box>
+
+            <ShopBanner />
         </Box>
     )
 }

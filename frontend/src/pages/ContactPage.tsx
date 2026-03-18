@@ -3,6 +3,9 @@
 import { useState, useEffect, useRef } from 'react'
 import { Box, Typography, Container, Grid, TextField, Button, CircularProgress } from '@mui/material'
 import { keyframes } from '@mui/system'
+import { Helmet } from 'react-helmet-async'
+
+
 
 const marquee = keyframes`
     from { transform: translateX(0); }
@@ -29,9 +32,9 @@ const goldShimmer = keyframes`
 `
 const meanderPattern = `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 10 h10 v-10 h20 v20 h-10 v10 h-20 v-20 h10' fill='none' stroke='%23C9A84C' stroke-width='1.5' opacity='0.3'/%3E%3C/svg%3E")`
 
-const EMAILJS_SERVICE_ID  = 'service_kdinmh1'
-const EMAILJS_TEMPLATE_ID = 'template_wn67l1o'
-const EMAILJS_PUBLIC_KEY  = 'Zakagw6uLJmrTN5tM'
+const EMAILJS_SERVICE_ID  = import.meta.env.VITE_EMAILJS_SERVICE_ID
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID
+const EMAILJS_PUBLIC_KEY  = import.meta.env.VITE_EMAILJS_PUBLIC_KEY
 
 const quotes = [
     { text: 'Γνῶθι σεαυτόν',             author: '— Дельфийский оракул', translation: 'Познай самого себя' },
@@ -159,6 +162,15 @@ const ContactPage = () => {
 
     return (
         <Box sx={{ fontFamily: '"Cormorant Garamond", serif', bgcolor: '#F8F5EE', minHeight: '100vh' }}>
+
+            {/*-------------------meta tags*/}
+            <Helmet>
+                <title>Контакты · Зоя Павловская</title>
+                <meta name="description" content="Свяжитесь с преподавателем греческого языка Зоей Павловской." />
+            </Helmet>
+
+            {/*------------------meta tags*/}
+
 
             {/* HERO */}
             <Box sx={{ position: 'relative', bgcolor: '#0B1F3A', py: { xs: 4, md: 7 }, overflow: 'hidden', textAlign: 'center' }}>
