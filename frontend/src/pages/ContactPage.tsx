@@ -1,3 +1,5 @@
+
+
 import { useState, useEffect, useRef } from 'react'
 import { Box, Typography, Container, Grid, TextField, Button, CircularProgress } from '@mui/material'
 import { keyframes } from '@mui/system'
@@ -27,7 +29,6 @@ const goldShimmer = keyframes`
 `
 const meanderPattern = `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 10 h10 v-10 h20 v20 h-10 v10 h-20 v-20 h10' fill='none' stroke='%23C9A84C' stroke-width='1.5' opacity='0.3'/%3E%3C/svg%3E")`
 
-// ✅ EmailJS credentials
 const EMAILJS_SERVICE_ID  = 'service_kdinmh1'
 const EMAILJS_TEMPLATE_ID = 'template_wn67l1o'
 const EMAILJS_PUBLIC_KEY  = 'Zakagw6uLJmrTN5tM'
@@ -98,22 +99,28 @@ const FormTitle = () => {
         return () => observer.disconnect()
     }, [])
     return (
-        <Box ref={ref} sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
-            {'Форма обращения'.split('').map((char, i) => (
-                <Box key={i} component="span" sx={{
-                    fontFamily: '"Great Vibes", cursive',
-                    fontSize: { xs: '3.2rem', md: '5rem' },
-                    fontWeight: 400, color: '#F8F5EE',
-                    letterSpacing: '0.02em', display: 'inline-block', opacity: 0,
-                    animation: inView
-                        ? `${charAppear} 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) ${i * 0.06}s forwards`
-                        : 'none',
-                    textShadow: '0 2px 20px rgba(201,168,76,0.3)',
-                    ...(char === ' ' && { minWidth: '0.3em' }),
-                }}>
-                    {char === ' ' ? '\u00A0' : char}
-                </Box>
-            ))}
+        <Box ref={ref} sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, alignItems: 'center', justifyContent: 'center', gap: { xs: 0, md: 3 } }}>
+            {['Форма', 'обращения'].map((word, wi) => {
+                const offset = wi === 0 ? 0 : 'Форма'.length + 1
+                return (
+                    <Box key={wi} sx={{ display: 'flex' }}>
+                        {word.split('').map((char, ci) => (
+                            <Box key={ci} component="span" sx={{
+                                fontFamily: '"Great Vibes", cursive',
+                                fontSize: { xs: '3.2rem', md: '5rem' },
+                                fontWeight: 400, color: '#F8F5EE',
+                                letterSpacing: '0.02em', display: 'inline-block', opacity: 0,
+                                animation: inView
+                                    ? `${charAppear} 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) ${(offset + ci) * 0.06}s forwards`
+                                    : 'none',
+                                textShadow: '0 2px 20px rgba(201,168,76,0.3)',
+                            }}>
+                                {char}
+                            </Box>
+                        ))}
+                    </Box>
+                )
+            })}
         </Box>
     )
 }
@@ -139,12 +146,7 @@ const ContactPage = () => {
             await ejs.send(
                 EMAILJS_SERVICE_ID,
                 EMAILJS_TEMPLATE_ID,
-                {
-                    name:     form.name,
-                    email:    form.email,
-                    message:  form.message,
-                    reply_to: form.email,
-                }
+                { name: form.name, email: form.email, message: form.message, reply_to: form.email }
             )
             setSent(true)
         } catch (e) {
@@ -160,10 +162,7 @@ const ContactPage = () => {
 
             {/* HERO */}
             <Box sx={{ position: 'relative', bgcolor: '#0B1F3A', py: { xs: 4, md: 7 }, overflow: 'hidden', textAlign: 'center' }}>
-                <Box component="video" autoPlay muted loop playsInline sx={{
-                    position: 'absolute', inset: 0, width: '100%', height: '100%',
-                    objectFit: 'cover', zIndex: 0, opacity: 0.4, objectPosition: 'center top',
-                }}>
+                <Box component="video" autoPlay muted loop playsInline sx={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0, opacity: 0.4, objectPosition: 'center top' }}>
                     <source src="/assets/greek_dances.mp4" type="video/mp4" />
                 </Box>
                 <Box sx={{ position: 'absolute', inset: 0, backgroundImage: meanderPattern, backgroundSize: '40px 40px', opacity: 0.15, zIndex: 1 }} />
@@ -175,7 +174,7 @@ const ContactPage = () => {
                         {'Контакты'.split('').map((char, i) => (
                             <Box key={i} component="span" sx={{
                                 fontFamily: '"Great Vibes", cursive',
-                                fontSize: { xs: '4rem', md: '6rem' },
+                                fontSize: { xs: '3rem', md: '4.5rem' },
                                 fontWeight: 400, color: '#F8F5EE',
                                 letterSpacing: '0.04em', display: 'inline-block', opacity: 0,
                                 animation: `${charAppear} 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) ${0.3 + i * 0.1}s forwards`,
@@ -228,19 +227,26 @@ const ContactPage = () => {
             <Box ref={wisdomRef} sx={{ bgcolor: '#0B1F3A', py: { xs: 6, md: 8 }, position: 'relative', overflow: 'hidden' }}>
                 <Box sx={{ position: 'absolute', inset: 0, backgroundImage: meanderPattern, backgroundSize: '40px 40px', opacity: 0.12 }} />
                 <Container maxWidth="lg" sx={{ position: 'relative' }}>
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', mb: 2 }}>
-                        {'Мудрость древних'.split('').map((char, i) => (
-                            <Box key={i} component="span" sx={{
-                                fontFamily: '"Great Vibes", cursive', fontSize: { xs: '4rem', md: '6rem' },
-                                fontWeight: 400, color: '#F8F5EE', letterSpacing: '0.04em', display: 'inline-block',
-                                opacity: wisdomInView ? undefined : 0,
-                                animation: wisdomInView ? `${charAppear} 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) ${i * 0.08}s forwards` : 'none',
-                                textShadow: '0 2px 20px rgba(201,168,76,0.3)',
-                                ...(char === ' ' && { minWidth: '0.4em' }),
-                            }}>
-                                {char === ' ' ? '\u00A0' : char}
-                            </Box>
-                        ))}
+                    {/* Адаптивный заголовок — каждое слово на своей строке на мобильных */}
+                    <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, alignItems: 'center', justifyContent: 'center', gap: { xs: 0, md: 3 }, mb: 2 }}>
+                        {['Мудрость', 'древних'].map((word, wi) => {
+                            const offset = wi === 0 ? 0 : 'Мудрость'.length + 1
+                            return (
+                                <Box key={wi} sx={{ display: 'flex' }}>
+                                    {word.split('').map((char, ci) => (
+                                        <Box key={ci} component="span" sx={{
+                                            fontFamily: '"Great Vibes", cursive', fontSize: { xs: '3rem', md: '4.5rem' },
+                                            fontWeight: 400, color: '#F8F5EE', letterSpacing: '0.04em', display: 'inline-block',
+                                            opacity: wisdomInView ? undefined : 0,
+                                            animation: wisdomInView ? `${charAppear} 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) ${(offset + ci) * 0.08}s forwards` : 'none',
+                                            textShadow: '0 2px 20px rgba(201,168,76,0.3)',
+                                        }}>
+                                            {char}
+                                        </Box>
+                                    ))}
+                                </Box>
+                            )
+                        })}
                     </Box>
                     <Box sx={{ width: wisdomInView ? undefined : 0, height: '2px', mx: 'auto', mb: 5, background: 'linear-gradient(90deg, transparent, #C9A84C, transparent)', opacity: wisdomInView ? undefined : 0, animation: wisdomInView ? `${drawLine} 1s ease 1.3s forwards` : 'none' }} />
                     <Grid container spacing={3}>
@@ -293,9 +299,9 @@ const ContactPage = () => {
                         <Box sx={{ p: 4, bgcolor: 'rgba(255,255,255,0.05)', border: '2px solid rgba(201,168,76,0.3)', borderTop: '3px solid #C9A84C', backdropFilter: 'blur(10px)', animation: `${goldShimmer} 3s ease-in-out infinite` }}>
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                                 {[
-                                    { label: 'Ваше имя', key: 'name',    type: 'text',  multiline: false },
-                                    { label: 'Email',    key: 'email',   type: 'email', multiline: false },
-                                    { label: 'Ваше сообщение', key: 'message', type: 'text', multiline: true },
+                                    { label: 'Ваше имя',       key: 'name',    type: 'text',  multiline: false },
+                                    { label: 'Email',           key: 'email',   type: 'email', multiline: false },
+                                    { label: 'Ваше сообщение', key: 'message', type: 'text',  multiline: true  },
                                 ].map(({ label, key, type, multiline }) => (
                                     <TextField key={key} label={label} type={type}
                                                value={form[key as keyof typeof form]}
@@ -308,13 +314,11 @@ const ContactPage = () => {
                                                }}
                                     />
                                 ))}
-
                                 {error && (
                                     <Typography sx={{ fontFamily: '"Lato", sans-serif', fontSize: '0.85rem', color: '#FF6B6B', textAlign: 'center' }}>
                                         {error}
                                     </Typography>
                                 )}
-
                                 <Button onClick={handleSubmit} disabled={sending} variant="contained" sx={{
                                     bgcolor: '#C9A84C', color: '#0B1F3A', py: 2,
                                     fontFamily: '"Cinzel", serif', fontSize: '1.1rem',
@@ -323,10 +327,7 @@ const ContactPage = () => {
                                     '&:disabled': { bgcolor: 'rgba(201,168,76,0.5)' },
                                     transition: 'all 0.3s ease',
                                 }}>
-                                    {sending
-                                        ? <CircularProgress size={22} sx={{ color: '#0B1F3A' }} />
-                                        : 'Отправить сообщение'
-                                    }
+                                    {sending ? <CircularProgress size={22} sx={{ color: '#0B1F3A' }} /> : 'Отправить сообщение'}
                                 </Button>
                             </Box>
                         </Box>
