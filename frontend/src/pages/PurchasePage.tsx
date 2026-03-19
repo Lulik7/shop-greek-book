@@ -1,3 +1,5 @@
+
+
 import { useState } from 'react'
 import { Box, Typography, Container, Button, Divider, TextField } from '@mui/material'
 import { keyframes } from '@mui/system'
@@ -36,14 +38,13 @@ const fieldSx = {
 
 const cardBeige = '#EDE0C4'
 
-// Публичные ссылки — не секретные, можно хранить прямо в коде
 const PAYPAL_URL = 'https://www.paypal.com/myaccount/transfer/send'
 const REVOLUT_URL = 'https://revolut.me/zoiaqf34f'
 const PAYPAL_EMAIL = 'zoepavlovska@gmail.com'
 
 const PurchasePage = () => {
     const [status, setStatus] = useState<'idle' | 'payment' | 'card_form' | 'success'>('idle')
-    const [buyerForm, setBuyerForm] = useState({ name: '', email: '', phone: '' })
+    const [buyerForm, setBuyerForm] = useState({ name: '', lastName: '', email: '', phone: '' })
     const [formError, setFormError] = useState('')
     const [cardForm, setCardForm] = useState({ name: '', note: '' })
     const [sending, setSending] = useState(false)
@@ -52,7 +53,9 @@ const PurchasePage = () => {
     const handleFormSubmit = () => {
         setFormError('')
         if (!buyerForm.name) { setFormError('Введите ваше имя'); return }
+        if (!buyerForm.lastName) { setFormError('Введите вашу фамилию'); return }
         if (!buyerForm.email || !buyerForm.email.includes('@')) { setFormError('Введите корректный email'); return }
+        if (!buyerForm.phone) { setFormError('Введите телефон'); return }
         setStatus('payment')
     }
 
@@ -73,7 +76,6 @@ const PurchasePage = () => {
         setStatus('success')
     }
 
-    // Секретные ключи EmailJS — берём из .env
     const sendNotification = async (method: string) => {
         setSending(true)
         try {
@@ -83,7 +85,7 @@ const PurchasePage = () => {
                 {
                     name: buyerForm.name,
                     email: buyerForm.email,
-                    message: `Способ оплаты: ${method}\nТелефон: ${buyerForm.phone || 'не указан'}\nСумма: 30 EUR\nКурс: Греческий за 45 дней (А1-А2)`,
+                    message: `Способ оплаты: ${method}\nИмя: ${buyerForm.name} ${buyerForm.lastName}\nТелефон: ${buyerForm.phone}\nСумма: 30 EUR\nКурс: Греческий за 45 дней (А1-А2)`,
                 },
                 import.meta.env.VITE_EMAILJS_PUBLIC_KEY
             )
@@ -124,7 +126,7 @@ const PurchasePage = () => {
                                 Заявка принята!
                             </Typography>
                             <Typography sx={{ fontFamily: '"Lato", sans-serif', fontSize: '1rem', color: '#2A3A52', mb: 1, lineHeight: 1.8 }}>
-                                Спасибо, <strong>{buyerForm.name}</strong>!
+                                Спасибо, <strong>{buyerForm.name} {buyerForm.lastName}</strong>!
                             </Typography>
                             <Typography sx={{ fontFamily: '"Lato", sans-serif', fontSize: '0.9rem', color: '#3A5A82', mb: 4, lineHeight: 1.8 }}>
                                 После подтверждения оплаты мы отправим материалы на<br />
@@ -172,13 +174,16 @@ const PurchasePage = () => {
                                             ШАГ 1 · ВАШИ ДАННЫЕ
                                         </Typography>
                                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
-                                            <TextField label="Ваше имя *" value={buyerForm.name}
+                                            <TextField label="Имя *" value={buyerForm.name}
                                                        onChange={e => setBuyerForm({ ...buyerForm, name: e.target.value })}
+                                                       fullWidth variant="outlined" sx={fieldSx} />
+                                            <TextField label="Фамилия *" value={buyerForm.lastName}
+                                                       onChange={e => setBuyerForm({ ...buyerForm, lastName: e.target.value })}
                                                        fullWidth variant="outlined" sx={fieldSx} />
                                             <TextField label="Email *" type="email" value={buyerForm.email}
                                                        onChange={e => setBuyerForm({ ...buyerForm, email: e.target.value })}
                                                        fullWidth variant="outlined" sx={fieldSx} />
-                                            <TextField label="Телефон" value={buyerForm.phone}
+                                            <TextField label="Телефон *" value={buyerForm.phone}
                                                        onChange={e => setBuyerForm({ ...buyerForm, phone: e.target.value })}
                                                        fullWidth variant="outlined" sx={fieldSx} />
                                             {formError && (
@@ -204,7 +209,9 @@ const PurchasePage = () => {
                                         <Box sx={{ p: 2, bgcolor: 'rgba(237,224,196,0.3)', border: '1px solid rgba(201,168,76,0.3)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                             <Box>
                                                 <Typography sx={{ fontFamily: '"Cinzel", serif', fontSize: '0.6rem', color: '#C9A84C', letterSpacing: '0.15em', mb: 0.3 }}>ПОКУПАТЕЛЬ</Typography>
-                                                <Typography sx={{ fontFamily: '"Lato", sans-serif', fontSize: '0.9rem', color: '#F8F5EE', fontWeight: 600 }}>{buyerForm.name}</Typography>
+                                                <Typography sx={{ fontFamily: '"Lato", sans-serif', fontSize: '0.9rem', color: '#F8F5EE', fontWeight: 600 }}>
+                                                    {buyerForm.name} {buyerForm.lastName}
+                                                </Typography>
                                                 <Typography sx={{ fontFamily: '"Lato", sans-serif', fontSize: '0.8rem', color: 'rgba(248,245,238,0.6)' }}>{buyerForm.email}</Typography>
                                             </Box>
                                             <Box onClick={() => setStatus('idle')} sx={{ cursor: 'pointer', color: 'rgba(201,168,76,0.8)', fontFamily: '"Cinzel", serif', fontSize: '1rem', '&:hover': { color: '#C9A84C' } }}>
@@ -217,31 +224,19 @@ const PurchasePage = () => {
                                         </Typography>
 
                                         {/* PayPal */}
-                                        <Box
-                                            onClick={handlePayPal}
-                                            sx={{ p: 3, cursor: 'pointer', bgcolor: cardBeige, border: '2px solid rgba(0,156,222,0.4)', display: 'flex', alignItems: 'center', gap: 2, transition: 'all 0.2s', '&:hover': { borderColor: '#009CDE', boxShadow: '0 0 16px rgba(0,156,222,0.4)' } }}
-                                        >
+                                        <Box onClick={handlePayPal} sx={{ p: 3, cursor: 'pointer', bgcolor: cardBeige, border: '2px solid rgba(0,156,222,0.4)', display: 'flex', alignItems: 'center', gap: 2, transition: 'all 0.2s', '&:hover': { borderColor: '#009CDE', boxShadow: '0 0 16px rgba(0,156,222,0.4)' } }}>
                                             <Box sx={{ width: 44, height: 44, borderRadius: '50%', bgcolor: '#009CDE', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', flexShrink: 0 }}>💳</Box>
                                             <Box>
                                                 <Typography sx={{ fontFamily: '"Cinzel", serif', fontSize: '0.9rem', color: '#003087', fontWeight: 700, letterSpacing: '0.1em', mb: 0.5 }}>PayPal</Typography>
-                                                <Typography sx={{ fontFamily: '"Lato", sans-serif', fontSize: '0.85rem', color: '#3A5A82' }}>
-                                                    Зайдите в PayPal → Отправить деньги
-                                                </Typography>
-                                                <Typography sx={{ fontFamily: '"Lato", sans-serif', fontSize: '0.85rem', color: '#3A5A82' }}>
-                                                    Аккаунт: <strong style={{ color: '#003087' }}>{PAYPAL_EMAIL}</strong>
-                                                </Typography>
-                                                <Typography sx={{ fontFamily: '"Lato", sans-serif', fontSize: '0.85rem', color: '#3A5A82' }}>
-                                                    Сумма: <strong>30 EUR</strong>
-                                                </Typography>
+                                                <Typography sx={{ fontFamily: '"Lato", sans-serif', fontSize: '0.85rem', color: '#3A5A82' }}>Зайдите в PayPal → Отправить деньги</Typography>
+                                                <Typography sx={{ fontFamily: '"Lato", sans-serif', fontSize: '0.85rem', color: '#3A5A82' }}>Аккаунт: <strong style={{ color: '#003087' }}>{PAYPAL_EMAIL}</strong></Typography>
+                                                <Typography sx={{ fontFamily: '"Lato", sans-serif', fontSize: '0.85rem', color: '#3A5A82' }}>Сумма: <strong>30 EUR</strong></Typography>
                                             </Box>
                                             <Typography sx={{ ml: 'auto', color: '#009CDE', fontSize: '1.2rem' }}>→</Typography>
                                         </Box>
 
                                         {/* Revolut */}
-                                        <Box
-                                            onClick={handleRevolut}
-                                            sx={{ p: 3, cursor: 'pointer', bgcolor: cardBeige, border: '2px solid rgba(93,95,239,0.4)', display: 'flex', alignItems: 'center', gap: 2, transition: 'all 0.2s', '&:hover': { borderColor: '#5D5FEF', boxShadow: '0 0 16px rgba(93,95,239,0.4)' } }}
-                                        >
+                                        <Box onClick={handleRevolut} sx={{ p: 3, cursor: 'pointer', bgcolor: cardBeige, border: '2px solid rgba(93,95,239,0.4)', display: 'flex', alignItems: 'center', gap: 2, transition: 'all 0.2s', '&:hover': { borderColor: '#5D5FEF', boxShadow: '0 0 16px rgba(93,95,239,0.4)' } }}>
                                             <Box sx={{ width: 44, height: 44, borderRadius: '50%', bgcolor: '#5D5FEF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', flexShrink: 0 }}>🔵</Box>
                                             <Box>
                                                 <Typography sx={{ fontFamily: '"Cinzel", serif', fontSize: '0.9rem', color: '#191C1F', fontWeight: 700, letterSpacing: '0.1em' }}>Revolut</Typography>
@@ -251,10 +246,7 @@ const PurchasePage = () => {
                                         </Box>
 
                                         {/* Карта */}
-                                        <Box
-                                            onClick={() => setStatus('card_form')}
-                                            sx={{ p: 3, cursor: 'pointer', bgcolor: cardBeige, border: '2px solid rgba(201,168,76,0.4)', display: 'flex', alignItems: 'center', gap: 2, transition: 'all 0.2s', '&:hover': { borderColor: '#C9A84C', boxShadow: '0 0 16px rgba(201,168,76,0.4)' } }}
-                                        >
+                                        <Box onClick={() => setStatus('card_form')} sx={{ p: 3, cursor: 'pointer', bgcolor: cardBeige, border: '2px solid rgba(201,168,76,0.4)', display: 'flex', alignItems: 'center', gap: 2, transition: 'all 0.2s', '&:hover': { borderColor: '#C9A84C', boxShadow: '0 0 16px rgba(201,168,76,0.4)' } }}>
                                             <Box sx={{ width: 44, height: 44, borderRadius: '50%', bgcolor: '#C9A84C', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', flexShrink: 0 }}>💳</Box>
                                             <Box>
                                                 <Typography sx={{ fontFamily: '"Cinzel", serif', fontSize: '0.9rem', color: '#0B1F3A', fontWeight: 700, letterSpacing: '0.1em' }}>Банковская карта</Typography>
@@ -265,23 +257,16 @@ const PurchasePage = () => {
                                     </Box>
                                 )}
 
-                                {/* Шаг 3 — банковский перевод */}
+                                {/* Шаг 3 */}
                                 {status === 'card_form' && (
                                     <Box sx={{ p: 4, bgcolor: cardBeige, border: '2px solid rgba(201,168,76,0.4)', borderTop: '3px solid #C9A84C', animation: `${goldShimmer} 3s ease-in-out infinite`, maxWidth: 520, mx: 'auto' }}>
                                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-                                            <Typography sx={{ fontFamily: '"Cinzel", serif', fontSize: '1rem', letterSpacing: '0.25em', color: '#8B6914' }}>
-                                                БАНКОВСКИЙ ПЕРЕВОД
-                                            </Typography>
-                                            <Box onClick={() => setStatus('payment')} sx={{ cursor: 'pointer', color: '#8B6914', fontFamily: '"Cinzel", serif', fontSize: '1rem', '&:hover': { color: '#C9A84C' } }}>
-                                                ← назад
-                                            </Box>
+                                            <Typography sx={{ fontFamily: '"Cinzel", serif', fontSize: '1rem', letterSpacing: '0.25em', color: '#8B6914' }}>БАНКОВСКИЙ ПЕРЕВОД</Typography>
+                                            <Box onClick={() => setStatus('payment')} sx={{ cursor: 'pointer', color: '#8B6914', fontFamily: '"Cinzel", serif', fontSize: '1rem', '&:hover': { color: '#C9A84C' } }}>← назад</Box>
                                         </Box>
 
                                         <Box sx={{ p: 2.5, mb: 3, bgcolor: 'rgba(255,255,255,0.5)', border: '1px solid rgba(139,105,20,0.2)' }}>
-                                            <Typography sx={{ fontFamily: '"Cinzel", serif', fontSize: '0.8rem', color: '#8B6914', letterSpacing: '0.15em', mb: 1.5 }}>
-                                                РЕКВИЗИТЫ ДЛЯ ПЕРЕВОДА
-                                            </Typography>
-
+                                            <Typography sx={{ fontFamily: '"Cinzel", serif', fontSize: '0.8rem', color: '#8B6914', letterSpacing: '0.15em', mb: 1.5 }}>РЕКВИЗИТЫ ДЛЯ ПЕРЕВОДА</Typography>
                                             {[
                                                 ['Получатель', 'Zoia Pavlovska'],
                                                 ['Сумма', '30 EUR'],
@@ -292,42 +277,23 @@ const PurchasePage = () => {
                                                     <Typography sx={{ fontFamily: '"Lato", sans-serif', fontSize: '1rem', color: '#0B1F3A', fontWeight: 800 }}>{value}</Typography>
                                                 </Box>
                                             ))}
-
-                                            {/* IBAN — защищённый */}
                                             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.8 }}>
                                                 <Typography sx={{ fontFamily: '"Lato", sans-serif', fontSize: '1rem', color: '#3A5A82' }}>IBAN:</Typography>
                                                 {shown ? (
                                                     <Box sx={{ display: 'flex', gap: '5px', userSelect: 'none', pointerEvents: 'none' }}>
                                                         {['LT88', '3250', '0563', '6744', '1990'].map((part, i) => (
-                                                            <Typography key={i} sx={{ fontFamily: '"Lato", sans-serif', fontSize: '1rem', color: '#0B1F3A', fontWeight: 800 }}>
-                                                                {part}
-                                                            </Typography>
+                                                            <Typography key={i} sx={{ fontFamily: '"Lato", sans-serif', fontSize: '1rem', color: '#0B1F3A', fontWeight: 800 }}>{part}</Typography>
                                                         ))}
                                                     </Box>
                                                 ) : (
-                                                    <Box
-                                                        onClick={() => setShown(true)}
-                                                        sx={{
-                                                            cursor: 'pointer',
-                                                            fontFamily: '"Cinzel", serif',
-                                                            fontSize: '0.75rem',
-                                                            color: '#8B6914',
-                                                            letterSpacing: '0.1em',
-                                                            borderBottom: '1px solid rgba(139,105,20,0.4)',
-                                                            pb: 0.2,
-                                                            '&:hover': { color: '#C9A84C' },
-                                                        }}
-                                                    >
+                                                    <Box onClick={() => setShown(true)} sx={{ cursor: 'pointer', fontFamily: '"Cinzel", serif', fontSize: '0.75rem', color: '#8B6914', letterSpacing: '0.1em', borderBottom: '1px solid rgba(139,105,20,0.4)', pb: 0.2, '&:hover': { color: '#C9A84C' } }}>
                                                         Показать IBAN
                                                     </Box>
                                                 )}
                                             </Box>
                                         </Box>
 
-                                        <Typography sx={{ fontFamily: '"Cinzel", serif', fontSize: '0.8rem', letterSpacing: '0.2em', color: '#8B6914', mb: 2 }}>
-                                            ПОДТВЕРДИТЕ ПЕРЕВОД
-                                        </Typography>
-
+                                        <Typography sx={{ fontFamily: '"Cinzel", serif', fontSize: '0.8rem', letterSpacing: '0.2em', color: '#8B6914', mb: 2 }}>ПОДТВЕРДИТЕ ПЕРЕВОД</Typography>
                                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                                             <TextField label="Ваше имя (как в переводе)" value={cardForm.name}
                                                        onChange={e => setCardForm({ ...cardForm, name: e.target.value })}
@@ -336,12 +302,8 @@ const PurchasePage = () => {
                                                        onChange={e => setCardForm({ ...cardForm, note: e.target.value })}
                                                        fullWidth variant="outlined" sx={fieldSx}
                                                        placeholder="Напр.: перевод выполнен 17.03.2026" />
-                                            <Button
-                                                onClick={handleCardSubmit}
-                                                disabled={sending}
-                                                variant="contained"
-                                                sx={{ bgcolor: '#C9A84C', color: '#0B1F3A', py: 1.8, fontFamily: '"Cinzel", serif', fontSize: '1rem', letterSpacing: '0.2em', borderRadius: 0, fontWeight: 700, mt: 1, '&:hover': { bgcolor: '#DFC078' } }}
-                                            >
+                                            <Button onClick={handleCardSubmit} disabled={sending} variant="contained"
+                                                    sx={{ bgcolor: '#C9A84C', color: '#0B1F3A', py: 1.8, fontFamily: '"Cinzel", serif', fontSize: '1rem', letterSpacing: '0.2em', borderRadius: 0, fontWeight: 700, mt: 1, '&:hover': { bgcolor: '#DFC078' } }}>
                                                 {sending ? 'Отправка...' : 'Я перевёл оплату ✦'}
                                             </Button>
                                         </Box>
