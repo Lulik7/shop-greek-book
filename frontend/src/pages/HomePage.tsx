@@ -937,9 +937,12 @@ const HomePage = () => {
             {/* FOOTER */}
             <Box sx={{ bgcolor: '#060E1C', py: 3, textAlign: 'center' }}>
                 <Typography sx={{ fontFamily: '"Cinzel", serif', color: 'rgba(201,168,76,0.6)', fontSize: '1.2rem', letterSpacing: '0.3em' }}>ΕΛΛΗΝΙΚΑ</Typography>
-                <Typography sx={{ fontFamily: '"Lato", sans-serif', color: 'rgba(255,255,255,0.25)', fontSize: '0.7rem', mt: 1, letterSpacing: '0.1em' }}>© 2026 · Все права защищены</Typography>
-                <Typography sx={{ fontFamily: '"Lato", sans-serif', color: 'rgba(255,255,255,0.15)', fontSize: '0.65rem', mt: 0.5, letterSpacing: '0.1em' }}>
-                    Разработано: <a href="yuliaberner.dev@gmail.com" style={{ color: 'rgba(201,168,76,0.4)', textDecoration: 'none' }}>Yulia Berner</a>
+                <Typography sx={{ fontFamily: '"Lato", sans-serif', color: 'rgba(255,255,255,0.5)', fontSize: '0.7rem', mt: 1, letterSpacing: '0.1em' }}>© 2026 · Все права защищены</Typography>
+                <Typography sx={{ fontFamily: '"Lato", sans-serif', color: 'rgba(201,168,76,0.7)', fontSize: '0.85rem', mt: 0.5, letterSpacing: '0.1em' }}>
+                    Разработано: Yulia Berner
+                </Typography>
+                <Typography sx={{ fontFamily: '"Lato", sans-serif', color: 'rgba(255,255,255,0.4)', fontSize: '0.95rem', mt: 0.3, letterSpacing: '0.1em' }}>
+                    <a href="https://mail.google.com/mail/?view=cm&to=yuliaberner.dev@gmail.com" target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(201,168,76,0.9)', textDecoration: 'none' }}>yuliaberner.dev@gmail.com</a>
                 </Typography>
             </Box>
 
