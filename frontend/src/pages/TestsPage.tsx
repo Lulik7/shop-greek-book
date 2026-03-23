@@ -1,9 +1,9 @@
 const TestsPage = () => {
     return (
         <iframe
-            src="/упражнения_0.html"
+            src="/exercises_0.html"
             style={{ width: '100%', height: '100vh', border: 'none' }}
-            title="Упражнения по грамматике"
+            title="Exercises"
         />
     )
 }
