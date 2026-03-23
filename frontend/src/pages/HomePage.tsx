@@ -615,9 +615,20 @@ const HomePage = () => {
                     opacity: { xs: 0.13, md: 1 },
                     pointerEvents: 'none',
                 }}>
-                    <Box component="img" src="/assets/santoriny.jpg" alt="Санторини" sx={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }} />
-                    <Box sx={{ position: 'absolute', inset: 0, background: { xs: 'none', md: 'linear-gradient(to right, rgba(11,31,58,0.3) 0%, transparent 60%)' } }} />
+                    <Box
+                        component="video"
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        sx={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }}
+                    >
+                        <source src="/assets/santorinyvideo.mp4" type="video/mp4" />
+                    </Box>
+                    <Box sx={{ position: 'absolute', inset: 0,
+                        background: { xs: 'none', md: 'linear-gradient(to right, rgba(11,31,58,0.3) 0%, transparent 60%)' } }} />
                 </Box>
+
 
                 <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
                     <Grid container>

@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom'
 
 const navItems = [
     { label: 'Главная',  to: '/' },
+    { label: 'Греческая\nтренажерка', to: '/exercises' },
+    { label: 'Караоке', to: '/karaoke' },
     { label: 'Контакты', to: '/contact' },
 ]
 
@@ -33,7 +35,13 @@ const Navbar = () => {
                     <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2, alignItems: 'center' }}>
                         {navItems.map(item => (
                             <Button key={item.to} color="inherit" component={Link} to={item.to}
-                                    sx={{ fontFamily: '"Cinzel", serif', fontSize: '1.05rem', letterSpacing: '0.12em' }}>
+                                    sx={{
+                                        fontFamily: '"Cinzel", serif', fontSize: '1.05rem',
+                                        letterSpacing: '0.12em',
+                                        whiteSpace: 'pre-line',
+                                        lineHeight: 1.25,
+                                        textAlign: 'center',
+                                    }}>
                                 {item.label}
                             </Button>
                         ))}
@@ -66,7 +74,7 @@ const Navbar = () => {
                     {navItems.map(item => (
                         <ListItem key={item.to} disablePadding>
                             <ListItemButton component={Link} to={item.to} onClick={() => setDrawerOpen(false)}>
-                                <ListItemText primary={item.label} primaryTypographyProps={{
+                                <ListItemText primary={item.label.replace('\n', ' ')} primaryTypographyProps={{
                                     fontFamily: '"Cinzel", serif', fontSize: '1rem',
                                     letterSpacing: '0.12em', color: 'white',
                                 }} />
