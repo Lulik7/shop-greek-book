@@ -142,16 +142,32 @@
     .ex-card{padding:16px 14px;}
     .ex-row{grid-template-columns:22px 1fr;gap:8px;}
     .ex-rc,.ex-freetext{font-size:14px;}
-    .ex-ifield{min-width:70px;font-size:14px;}
+    .ex-ifield{min-width:60px;font-size:14px;max-width:90%;}
     .ex-afield{font-size:14px;}
     .ex-tab{font-size:13px;padding:7px 14px;}
+    .ex-title{font-size:13px;}
+    .ex-head{gap:8px;}
+    .ex-line{display:none;}
+    table{font-size:13px !important;}
+    table td{width:26px !important;height:26px !important;font-size:13px !important;}
 }
-@media(max-width:400px) {
-    .ex-wrap{padding:14px 10px 0;}
-    .ex-num{font-size:22px;min-width:30px;}
-    .ex-titles{max-width:80%;}
+@media(max-width:480px) {
+    .ex-wrap{padding:12px 8px 0;}
+    .ex-num{font-size:20px;min-width:28px;}
+    .ex-titles{max-width:85%;}
+    .ex-title{font-size:12px;}
     .ex-card{padding:12px 10px;}
-    .ex-ifield{min-width:55px;font-size:13px;}
+    .ex-ifield{min-width:50px;font-size:13px;}
     .ex-rc{font-size:13px;}
+    .ex-row{gap:6px;}
     .ex-tab{font-size:12px;padding:6px 10px;letter-spacing:.5px;}
+    .ex-tabs{gap:6px;}
+    table{font-size:12px !important;}
+    table td{width:22px !important;height:22px !important;font-size:12px !important;padding:0 !important;}
+}
+@media(max-width:360px) {
+    .ex-wrap{padding:10px 6px 0;}
+    .ex-ifield{min-width:40px;font-size:12px;}
+    .ex-rc{font-size:12px;}
+    table td{width:18px !important;height:18px !important;font-size:11px !important;}
 }

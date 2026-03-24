@@ -136,7 +136,7 @@ export default function ExercisesLayout({ children, active }: { children: ReactN
 
             <footer className="ex-footer">
                 <div className="ex-footer-logo">ΕΛΛΗΝΙΚΑ</div>
-                <div className="ex-footer-copy">© 2026 · Все права защищены · Зоя Павловская</div>
+                <div className="ex-footer-copy">© 2026 · Все права защищены · </div>
             </footer>
         </Box>
     )
