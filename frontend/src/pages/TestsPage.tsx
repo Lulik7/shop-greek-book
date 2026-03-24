@@ -1,11 +1,7 @@
+import { Navigate } from 'react-router-dom'
+
 const TestsPage = () => {
-    return (
-        <iframe
-            src="/exercises_0.html"
-            style={{ width: '100%', height: '100vh', border: 'none' }}
-            title="Exercises"
-        />
-    )
+    return <Navigate to="/exercises/0" replace />
 }
 
 export default TestsPage

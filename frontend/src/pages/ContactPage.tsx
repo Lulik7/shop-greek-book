@@ -175,7 +175,7 @@ const ContactPage = () => {
             {/* HERO */}
             <Box sx={{ position: 'relative', bgcolor: '#0B1F3A', py: { xs: 4, md: 7 }, overflow: 'hidden', textAlign: 'center' }}>
                 <Box component="video" autoPlay muted loop playsInline sx={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0, opacity: 0.4, objectPosition: 'center top' }}>
-                    <source src="/assets/greek_dances.mp4" type="video/mp4" />
+                    <source src="/assets/parfenonvideo.mp4" type="video/mp4" />
                 </Box>
                 <Box sx={{ position: 'absolute', inset: 0, backgroundImage: meanderPattern, backgroundSize: '40px 40px', opacity: 0.15, zIndex: 1 }} />
                 <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2 }}>

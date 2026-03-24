@@ -297,10 +297,10 @@ export default function KaraokePage() {
                     </Typography>
 
                     {/* Рукописный заголовок буква за буквой */}
-                    {["Пойте с нами", "песни на греческом!"].map((line, lineIdx) => {
-                        const offset = lineIdx === 0 ? 0 : "Пойте с нами".length + 1;
+                    {["Пойте с нами,", "давно знакомые,", "песни на греческом!"].map((line, lineIdx) => {
+                        const offset = lineIdx === 0 ? 0 : lineIdx === 1 ? "Пойте с нами".length + 1 : "Пойте с нами".length + 1 + "давно знакомые,".length + 1;
                         return (
-                            <Box key={lineIdx} sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center", mb: lineIdx === 0 ? -1 : 0 }}>
+                            <Box key={lineIdx} sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center", mb: -5 }}>
                                 {line.split("").map((char, ci) => (
                                     <Box key={ci} component="span" sx={{
                                         fontFamily: '"Great Vibes", cursive',
