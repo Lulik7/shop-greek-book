@@ -123,7 +123,6 @@ const SONGS: Song[] = [
             { el: "Μαζί πάνω στο νερό».", translit: "Mazí páno sto neró».", ru: "Гулять по воде со мной!", startTime: 117 },
         ],
     },
-
     {
         title: "Пачка сигарет",
         titleEl: "Ένα πακέτο τσιγάρα",
@@ -196,7 +195,7 @@ export default function KaraokePage() {
 
     useEffect(() => {
         if (delayRef.current) clearTimeout(delayRef.current);
-        const delay = songIndex === 0 && lineIndex >= 18 ? 0 : songIndex === 1 ? 200 : 800;
+        const delay = songIndex === 0 && lineIndex >= 18 ? 0 : songIndex === 1 ? 0 : songIndex === 2 ? 1800 : 800;
         delayRef.current = setTimeout(() => setDisplayedIndex(lineIndex), delay);
         return () => { if (delayRef.current) clearTimeout(delayRef.current); };
     }, [lineIndex, songIndex]);
@@ -300,7 +299,6 @@ export default function KaraokePage() {
 
             {/* ── HERO ── */}
             <Box sx={{ position: "relative", bgcolor: "#0B1F3A", py: { xs: 5, md: 8 }, overflow: "hidden", textAlign: "center" }}>
-                {/* Background video */}
                 <Box component="video" autoPlay muted loop playsInline sx={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.3, zIndex: 0 }}>
                     <source src="/assets/greek3video.mp4" type="video/mp4" />
                 </Box>
@@ -309,8 +307,6 @@ export default function KaraokePage() {
                     <Typography sx={{ fontFamily: '"Cinzel", serif', fontSize: "0.75rem", letterSpacing: "0.35em", color: "#C9A84C", mb: 2, animation: `${fadeUp} 0.8s ease 0.1s both` }}>
                         ΜΑΘΕ ΕΛΛΗΝΙΚΑ ΤΡΑΓΟΥΔΩΝΤΑΣ
                     </Typography>
-
-                    {/* Рукописный заголовок буква за буквой */}
                     {["Пойте с нами,", "давно знакомые,", "песни на греческом!"].map((line, lineIdx) => {
                         const offset = lineIdx === 0 ? 0 : lineIdx === 1 ? "Пойте с нами".length + 1 : "Пойте с нами".length + 1 + "давно знакомые,".length + 1;
                         return (
@@ -330,7 +326,6 @@ export default function KaraokePage() {
                             </Box>
                         );
                     })}
-
                     <Box sx={{ width: 0, height: "2px", mx: "auto", mt: 2, mb: 4, background: "linear-gradient(90deg, transparent, #C9A84C, transparent)", animation: `${drawLine} 1s ease 2.5s forwards`, opacity: 0 }} />
                 </Container>
                 <Box sx={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 3, background: "linear-gradient(90deg, transparent, #C9A84C 30%, #C9A84C 70%, transparent)", zIndex: 2 }} />
@@ -341,38 +336,63 @@ export default function KaraokePage() {
             {/* ── SONG SELECTOR ── */}
             <Box sx={{ py: { xs: 4, md: 6 }, bgcolor: "#0B1F3A" }}>
                 <Container maxWidth="lg">
-                    <Stack direction="row" sx={{ flexWrap: "wrap", justifyContent: "center", gap: 2 }}>
+                    <Box sx={{
+                        display: "grid",
+                        gridTemplateColumns: { xs: "1fr 1fr", sm: "repeat(2, 1fr)", md: "repeat(4, 1fr)" },
+                        gap: { xs: 1.5, sm: 2, md: 2 },
+                    }}>
                         {SONGS.map((s, i) => (
                             <Box
                                 key={i}
                                 onClick={() => handleSongSelect(i)}
                                 sx={{
-                                    p: { xs: 2, md: 3 },
+                                    p: { xs: 1.5, sm: 2, md: 3 },
                                     border: i === songIndex ? "2px solid #C9A84C" : "1px solid rgba(201,168,76,0.25)",
                                     borderTop: i === songIndex ? "3px solid #C9A84C" : "3px solid rgba(201,168,76,0.4)",
                                     bgcolor: i === songIndex ? "rgba(201,168,76,0.12)" : "rgba(255,255,255,0.03)",
                                     cursor: "pointer",
                                     transition: "all 0.3s ease",
-                                    minWidth: { xs: 160, md: 220 },
                                     animation: `${fadeUp} 0.6s ease ${i * 0.15}s both`,
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    justifyContent: "space-between",
+                                    height: { xs: 90, sm: 100, md: 115 },
                                     "&:hover": { bgcolor: "rgba(201,168,76,0.1)", transform: "translateY(-4px)", boxShadow: "0 8px 30px rgba(201,168,76,0.15)" },
                                 }}
                             >
-                                <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.5 }}>
-                                    <MusicNoteIcon sx={{ fontSize: "1rem", color: "#C9A84C" }} />
-                                    <Typography sx={{ fontFamily: '"Cinzel", serif', fontSize: { xs: "0.7rem", md: "0.85rem" }, color: "#C9A84C", letterSpacing: "0.08em" }}>
+                                <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+                                    <MusicNoteIcon sx={{ fontSize: { xs: "0.75rem", sm: "0.85rem", md: "1rem" }, color: "#C9A84C", flexShrink: 0 }} />
+                                    <Typography sx={{
+                                        fontFamily: '"Cinzel", serif',
+                                        fontSize: { xs: "0.6rem", sm: "0.7rem", md: "0.8rem" },
+                                        color: "#C9A84C",
+                                        letterSpacing: "0.06em",
+                                        lineHeight: 1.2,
+                                    }}>
                                         {s.titleEl}
                                     </Typography>
                                 </Box>
-                                <Typography sx={{ fontFamily: '"Cormorant Garamond", serif', fontSize: { xs: "1.1rem", md: "1.35rem" }, fontWeight: 700, color: "#F8F5EE", lineHeight: 1.2 }}>
+                                <Typography sx={{
+                                    fontFamily: '"Cormorant Garamond", serif',
+                                    fontSize: { xs: "0.95rem", sm: "1.1rem", md: "1.25rem" },
+                                    fontWeight: 700,
+                                    color: "#F8F5EE",
+                                    lineHeight: 1.2,
+                                    py: 0.5,
+                                }}>
                                     {s.title}
                                 </Typography>
-                                <Typography sx={{ fontFamily: '"Lato", sans-serif', fontSize: "0.72rem", color: "rgba(248,245,238,0.4)", mt: 0.5, letterSpacing: "0.05em" }}>
+                                <Typography sx={{
+                                    fontFamily: '"Lato", sans-serif',
+                                    fontSize: { xs: "0.62rem", sm: "0.68rem", md: "0.72rem" },
+                                    color: "rgba(248,245,238,0.4)",
+                                    letterSpacing: "0.04em",
+                                }}>
                                     {s.artist}
                                 </Typography>
                             </Box>
                         ))}
-                    </Stack>
+                    </Box>
                 </Container>
             </Box>
 
