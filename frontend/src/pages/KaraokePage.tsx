@@ -147,18 +147,31 @@ const SONGS: Song[] = [
         audioSrc: "/assets/tsvetochki.mp3",
         totalDuration: 150,
         lines: [
-            { el: "Μα γιατί στην κεφαλή", translit: "Ma yatí stin kefalí", ru: "Отчего на голове не растут цветочки,", startTime: 5 },
-            { el: "Δε φυτρώνουν λουλουδάκια,", translit: "De fytrónum lulududákia,", ru: "А растут они в траве и на каждой кочке.", startTime: 9 },
-            { el: "Παρά μόνο στην αυλή,", translit: "Pará móno stin avlí,", ru: "Если волосы растут, значит их сажают,", startTime: 13 },
-            { el: "Σε κήπους και χωράφια;", translit: "Se kípus ke choráfia;", ru: "Отчего сажать цветы мне не разрешают...", startTime: 17 },
-            { el: "Να μπορούσα μια φορά", translit: "Na boroúsa mia forá", ru: "Хорошо бы сделать так:", startTime: 23 },
-            { el: "Να κόψω τις μπουκλίτσες,", translit: "Na kópso tis buklítses,", ru: "Срезать все кудряшки,", startTime: 27 },
-            { el: "Παπαρούνα στην κορφή και γύρω μαργαρίτες.", translit: "Paparoúna stin korfí ke gýro margarítes.", ru: "На макушке красный мак, а вокруг — ромашки!", startTime: 31 },
-            { el: "Της αδελφής μου θα φυτέψω", translit: "Tis adelfís mu tha fitépso", ru: "А сестрёнке посажу я, конечно, розу —", startTime: 45 },
-            { el: "Ρόδο στο κεφαλάκι", translit: "Ródo sto kefaláki", ru: "Нет прекраснее цветов!", startTime: 49 },
-            { el: "Μα έκλαψε λιγάκι:", translit: "Ma éklapse ligáki:", ru: "А сестрёнка — в слёзы:", startTime: 53 },
-            { el: "«Στη μαμά μου θα το πω, θα κρυφτώ, θα τρέξω!»", translit: "«Sti mamá mu tha to po, tha kriftó, tha tréxo!»", ru: "«Я всё маме расскажу, убегу и спрячусь!»", startTime: 57 },
-            { el: "Άμα είσαι τέτοια εσύ, κάκτο θα σου φυτέψω!", translit: "Áma ísai tétoia esý, kákto tha su fitépso!", ru: "Вот возьму и посажу ей за это кактус.", startTime: 62 },
+            { el: "Μα γιατί στην κεφαλή", translit: "Ma yatí stin kefalí", ru: "Отчего на голове не растут цветочки,", startTime: 3 },
+            { el: "Δε φυτρώνουν λουλουδάκια,", translit: "De fytrónum lulududákia,", ru: "А растут они в траве и на каждой кочке.", startTime: 6 },
+            { el: "Παρά μόνο στην αυλή,", translit: "Pará móno stin avlí,", ru: "Если волосы растут, значит их сажают,", startTime: 9 },
+            { el: "Σε κήπους και χωράφια;", translit: "Se kípus ke choráfia;", ru: "Отчего сажать цветы мне не разрешают...", startTime: 13 },
+            { el: "Να μπορούσα μια φορά", translit: "Na boroúsa mia forá", ru: "Хорошо бы сделать так:", startTime: 18 },
+            { el: "Να κόψω τις μπουκλίτσες,", translit: "Na kópso tis buklítses,", ru: "Срезать все кудряшки,", startTime: 20 },
+            { el: "Παπαρούνα στην κορφή,", translit: "Paparoúna stin korfí,", ru: "На макушке красный мак,", startTime: 22 },
+            { el: "Και γύρω μαργαρίτες.", translit: "Ke gýro margarítes.", ru: "А вокруг — ромашки!", startTime: 24 },
+            { el: "Να μπορούσα μια φορά", translit: "Na boroúsa mia forá", ru: "Хорошо бы сделать так:", startTime: 26 },
+            { el: "Να κόψω τις μπουκλίτσες,", translit: "Na kópso tis buklítses,", ru: "Срезать все кудряшки,", startTime: 28 },
+            { el: "Παπαρούνα στην κορφή,", translit: "Paparoúna stin korfí,", ru: "На макушке красный мак,", startTime: 30 },
+            { el: "Και γύρω μαργαρίτες.", translit: "Ke gýro margarítes.", ru: "А вокруг — ромашки!", startTime: 31 },
+            { el: "Της αδελφής μου θα φυτέψω", translit: "Tis adelfís mu tha fitépso", ru: "А сестрёнке посажу я, конечно, розу —", startTime: 34 },
+            { el: "Ρόδο στο κεφαλάκι", translit: "Ródo sto kefaláki", ru: "Нет прекраснее цветов!", startTime: 37 },
+            { el: "Μα έκλαψε λιγάκι:", translit: "Ma éklapse ligáki:", ru: "А сестрёнка — в слёзы:", startTime: 40 },
+            { el: "«Στη μαμά μου θα το πω, θα κρυφτώ, θα τρέξω!»", translit: "«Sti mamá mu tha to po, tha kriftó, tha tréxo!»", ru: "«Я всё маме расскажу, убегу и спрячусь!»", startTime: 42 },
+            { el: "Άμα είσαι τέτοια εσύ, κάκτο θα σου φυτέψω!", translit: "Áma ísai tétoia esý, kákto tha su fitépso!", ru: "Вот возьму и посажу ей за это кактус.", startTime: 46 },
+            { el: "Να μπορούσα μια φορά", translit: "Na boroúsa mia forá", ru: "Хорошо бы сделать так:", startTime: 50 },
+            { el: "Να κόψω τις μπουκλίτσες,", translit: "Na kópso tis buklítses,", ru: "Срезать все кудряшки,", startTime: 52 },
+            { el: "Παπαρούνα στην κορφή,", translit: "Paparoúna stin korfí,", ru: "На макушке красный мак,", startTime: 54 },
+            { el: "Και γύρω μαργαρίτες.", translit: "Ke gýro margarítes.", ru: "А вокруг — ромашки!", startTime: 55 },
+            { el: "Να μπορούσα μια φορά", translit: "Na boroúsa mia forá", ru: "Хорошо бы сделать так:", startTime: 57 },
+            { el: "Να κόψω τις μπουκλίτσες,", translit: "Na kópso tis buklítses,", ru: "Срезать все кудряшки,", startTime: 59 },
+            { el: "Παπαρούνα στην κορφή,", translit: "Paparoúna stin korfí,", ru: "На макушке красный мак,", startTime: 61 },
+            { el: "Και γύρω μαργαρίτες.", translit: "Ke gýro margarítes.", ru: "А вокруг — ромашки!", startTime: 62 },
         ],
     },
 ];
@@ -195,7 +208,7 @@ export default function KaraokePage() {
 
     useEffect(() => {
         if (delayRef.current) clearTimeout(delayRef.current);
-        const delay = songIndex === 0 && lineIndex >= 18 ? 0 : songIndex === 1 ? 0 : songIndex === 2 ? 1800 : 800;
+        const delay = songIndex === 0 && lineIndex >= 18 ? 0 : songIndex === 1 ? 0 : songIndex === 2 ? 1800 : songIndex === 3 ? 0 : 800;
         delayRef.current = setTimeout(() => setDisplayedIndex(lineIndex), delay);
         return () => { if (delayRef.current) clearTimeout(delayRef.current); };
     }, [lineIndex, songIndex]);
@@ -213,7 +226,7 @@ export default function KaraokePage() {
         const timeUntilFirst = firstLineTime - currentTime;
         if (timeUntilFirst <= 5 && timeUntilFirst > 0 && !countdownShown.current) {
             countdownShown.current = true;
-            const startCount = Math.min(Math.ceil(timeUntilFirst), 4);
+            const startCount = Math.min(Math.ceil(timeUntilFirst), 2);
             setCountdown(startCount);
             let count = startCount;
             if (countdownRef.current) clearInterval(countdownRef.current);
@@ -234,7 +247,7 @@ export default function KaraokePage() {
             if (audio.duration && audio.duration - audio.currentTime <= 8) {
                 audio.volume = Math.max(0, (audio.duration - audio.currentTime) / 8) * volume;
             } else if (!muted) {
-                audio.volume = volume;
+                audio.volume = Math.min(1, volume * 1.3);
             }
         };
         const onDurationChange = () => setDuration(audio.duration);
@@ -408,7 +421,6 @@ export default function KaraokePage() {
                         animation: `${goldShimmer} 4s ease-in-out infinite`,
                         overflow: "hidden",
                     }}>
-                        {/* Countdown overlay */}
                         {countdown !== null && (
                             <Box sx={{ position: "absolute", inset: 0, zIndex: 10, display: "flex", alignItems: "center", justifyContent: "center", bgcolor: "rgba(11,31,58,0.92)", backdropFilter: "blur(6px)" }}>
                                 <Box key={countdown} sx={{ textAlign: "center", animation: `${countPop} 0.6s cubic-bezier(0.175,0.885,0.32,1.275)` }}>
@@ -425,7 +437,6 @@ export default function KaraokePage() {
                             </Box>
                         )}
 
-                        {/* Title bar */}
                         <Box sx={{ px: { xs: 2, md: 4 }, py: 2.5, borderBottom: "1px solid rgba(201,168,76,0.15)", display: "flex", alignItems: "center", justifyContent: "space-between", bgcolor: "rgba(201,168,76,0.05)" }}>
                             <Box>
                                 <Typography sx={{ fontFamily: '"Cinzel", serif', fontSize: { xs: "0.7rem", md: "0.85rem" }, color: "#C9A84C", letterSpacing: "0.12em", opacity: 0.85 }}>
@@ -440,7 +451,6 @@ export default function KaraokePage() {
                             </Typography>
                         </Box>
 
-                        {/* Column headers */}
                         <Box sx={{ display: { xs: "none", md: "grid" }, gridTemplateColumns: "1fr 1fr", px: 4, pt: 3, pb: 1, borderBottom: "1px solid rgba(201,168,76,0.08)" }}>
                             <Typography sx={{ fontFamily: '"Cinzel", serif', fontSize: "0.72rem", color: "#C9A84C", letterSpacing: "0.18em", opacity: 0.7 }}>
                                 ΕΛΛΗΝΙΚΑ + ΜΕΤΑΓΡΑΦΗ
@@ -450,7 +460,6 @@ export default function KaraokePage() {
                             </Typography>
                         </Box>
 
-                        {/* Lyrics */}
                         <Box sx={{ px: { xs: 2, md: 4 }, py: { xs: 3, md: 4 }, minHeight: { xs: 140, md: 170 }, display: "flex", alignItems: "center" }}>
                             {(() => {
                                 const line = song.lines[displayedIndex];
@@ -485,7 +494,6 @@ export default function KaraokePage() {
                             })()}
                         </Box>
 
-                        {/* Seek bar */}
                         <Box sx={{ px: { xs: 2, md: 4 }, pb: 1 }}>
                             <Slider value={currentTime} min={0} max={totalSec || 1} step={0.5} onChange={handleSeek}
                                     sx={{ color: "#1B8FE0", height: 3, "& .MuiSlider-thumb": { width: 12, height: 12, bgcolor: "#C9A84C", "&:hover": { boxShadow: "0 0 0 6px rgba(201,168,76,0.2)" } }, "& .MuiSlider-rail": { bgcolor: "rgba(255,255,255,0.1)" } }} />
@@ -495,9 +503,7 @@ export default function KaraokePage() {
                             </Box>
                         </Box>
 
-                        {/* Controls */}
                         <Box sx={{ px: { xs: 2, md: 4 }, py: { xs: 2, md: 2.5 }, display: "flex", alignItems: "center", justifyContent: { xs: "center", md: "space-between" }, borderTop: "1px solid rgba(201,168,76,0.1)", flexWrap: "wrap", gap: 2 }}>
-                            {/* Volume — desktop only */}
                             <Stack direction="row" alignItems="center" spacing={1} sx={{ minWidth: 130, display: { xs: "none", md: "flex" } }}>
                                 <Tooltip title={muted ? "Включить" : "Выключить"}>
                                     <IconButton onClick={handleMute} sx={{ color: "rgba(248,245,238,0.5)", p: 0.5 }}>
@@ -508,7 +514,6 @@ export default function KaraokePage() {
                                         sx={{ width: 80, color: "#C9A84C", height: 3, "& .MuiSlider-thumb": { width: 10, height: 10 }, "& .MuiSlider-rail": { bgcolor: "rgba(255,255,255,0.1)" } }} />
                             </Stack>
 
-                            {/* Restart + Play */}
                             <Stack direction="row" alignItems="center" spacing={2}>
                                 <Tooltip title="Сначала / Από την αρχή">
                                     <IconButton onClick={handleRestart} sx={{ color: "rgba(248,245,238,0.4)", border: "1px solid rgba(201,168,76,0.2)", transition: "all 0.2s", "&:hover": { color: "#C9A84C", borderColor: "#C9A84C", bgcolor: "rgba(201,168,76,0.08)" } }}>
@@ -518,7 +523,6 @@ export default function KaraokePage() {
                                 <IconButton onClick={handlePlayPause} sx={{ width: { xs: 56, md: 64 }, height: { xs: 56, md: 64 }, bgcolor: playing ? "#C9A84C" : "transparent", border: playing ? "none" : "2px solid #C9A84C", color: playing ? "#0B1F3A" : "#C9A84C", boxShadow: playing ? "0 4px 20px rgba(201,168,76,0.4)" : "none", transition: "all 0.3s ease", "&:hover": { bgcolor: "#C9A84C", color: "#0B1F3A", transform: "scale(1.08)" } }}>
                                     {playing ? <PauseIcon sx={{ fontSize: 28 }} /> : <PlayArrowIcon sx={{ fontSize: 28 }} />}
                                 </IconButton>
-                                {/* Volume mobile */}
                                 <IconButton onClick={handleMute} sx={{ display: { xs: "flex", md: "none" }, color: muted ? "rgba(248,245,238,0.3)" : "rgba(248,245,238,0.6)", border: "1px solid rgba(201,168,76,0.2)" }}>
                                     {muted ? <VolumeOffIcon fontSize="small" /> : <VolumeUpIcon fontSize="small" />}
                                 </IconButton>
@@ -534,7 +538,6 @@ export default function KaraokePage() {
                 </Container>
             </Box>
 
-            {/* Footer line */}
             <Box sx={{ height: 3, background: "linear-gradient(90deg, transparent, #C9A84C 30%, #C9A84C 70%, transparent)" }} />
         </Box>
     );
