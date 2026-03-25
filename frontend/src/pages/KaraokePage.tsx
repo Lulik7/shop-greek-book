@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import {
-    Box, Typography, IconButton, Slider,  Stack, Tooltip, Container,
+    Box, Typography, IconButton, Slider, Stack, Tooltip, Container,
 } from "@mui/material";
 import { keyframes } from "@mui/system";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
@@ -9,6 +9,7 @@ import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import VolumeOffIcon from "@mui/icons-material/VolumeOff";
+import GuitarAnimation from "./GuitarAnimation";
 
 // ─── Keyframes ────────────────────────────────────────────────────────────────
 const marqueeAnim = keyframes`
@@ -320,8 +321,8 @@ export default function KaraokePage() {
                     <Typography sx={{ fontFamily: '"Cinzel", serif', fontSize: "0.75rem", letterSpacing: "0.35em", color: "#C9A84C", mb: 2, animation: `${fadeUp} 0.8s ease 0.1s both` }}>
                         ΜΑΘΕ ΕΛΛΗΝΙΚΑ ΤΡΑΓΟΥΔΩΝΤΑΣ
                     </Typography>
-                    {["Пойте с нами,", "давно знакомые,", "песни на греческом!"].map((line, lineIdx) => {
-                        const offset = lineIdx === 0 ? 0 : lineIdx === 1 ? "Пойте с нами".length + 1 : "Пойте с нами".length + 1 + "давно знакомые,".length + 1;
+                    {["Пойте с нами", "давно знакомые", "песни на греческом!"].map((line, lineIdx) => {
+                        const offset = lineIdx === 0 ? 0 : lineIdx === 1 ? "Пойте с нами,".length + 1 : "Пойте с нами,".length + 1 + "давно знакомые,".length + 1;
                         return (
                             <Box key={lineIdx} sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center", mb: -5 }}>
                                 {line.split("").map((char, ci) => (
@@ -453,7 +454,7 @@ export default function KaraokePage() {
 
                         <Box sx={{ display: { xs: "none", md: "grid" }, gridTemplateColumns: "1fr 1fr", px: 4, pt: 3, pb: 1, borderBottom: "1px solid rgba(201,168,76,0.08)" }}>
                             <Typography sx={{ fontFamily: '"Cinzel", serif', fontSize: "0.72rem", color: "#C9A84C", letterSpacing: "0.18em", opacity: 0.7 }}>
-                                ΕΛΛΗΝΙΚΑ + ΜΕΤΑΓΡΑΦΗ
+                                ΕΛΛΗΝΙΚΑ + **ΜΕΤΆΦΡΑΣΗ**
                             </Typography>
                             <Typography sx={{ fontFamily: '"Cinzel", serif', fontSize: "0.72rem", color: "rgba(248,245,238,0.4)", letterSpacing: "0.18em", pl: 3 }}>
                                 ПЕРЕВОД
@@ -538,7 +539,49 @@ export default function KaraokePage() {
                 </Container>
             </Box>
 
+            {/*---------------------------------------------------------------------*/}
+            {/* ── GUITAR + YOUTUBE ── */}
+            <Box sx={{ pb: { xs: 6, md: 8 }, bgcolor: "#0B1F3A" }}>
+                <Container maxWidth="md">
+                    <Box sx={{ position: "relative" }}>
+                        {/* Видео */}
+                        <Box sx={{
+                            position: "relative",
+                            paddingTop: "56.25%",
+                            border: "2px solid rgba(201,168,76,0.3)",
+                            borderTop: "3px solid #C9A84C",
+                            overflow: "hidden",
+                        }}>
+                            <Box
+                                component="iframe"
+                                src="https://www.youtube.com/embed/LPCX8R1IeLU"
+                                title="YouTube video player"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                                sx={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: "none" }}
+                            />
+                        </Box>
+                        {/* Гитара поверх видео — левый верхний край */}
+                        <Box sx={{
+                            position: "absolute",
+                            top: { xs: "-40px", md: "-60px" },
+                            left: { xs: "-10px", md: "-30px" },
+                            width: { xs: "100px", sm: "130px", md: "160px" },
+                            zIndex: 2,
+                            pointerEvents: "none",
+                        }}>
+                            <GuitarAnimation />
+                        </Box>
+                    </Box>
+                </Container>
+            </Box>
+            {/*-------------------------------------------*/}
+            {/* ── FOOTER ── */}
             <Box sx={{ height: 3, background: "linear-gradient(90deg, transparent, #C9A84C 30%, #C9A84C 70%, transparent)" }} />
+            <Box sx={{ bgcolor: "#060E1C", py: 3, textAlign: "center" }}>
+                <Typography sx={{ fontFamily: '"Cinzel", serif', color: "rgba(201,168,76,0.6)", fontSize: "1.2rem", letterSpacing: "0.3em" }}>ΕΛΛΗΝΙΚΑ</Typography>
+                <Typography sx={{ fontFamily: '"Lato", sans-serif', color: "rgba(255,255,255,0.25)", fontSize: "0.7rem", mt: 1, letterSpacing: "0.1em" }}>© 2026 · Все права защищены</Typography>
+            </Box>
         </Box>
     );
 }
