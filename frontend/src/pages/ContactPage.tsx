@@ -46,9 +46,9 @@ const quotes = [
 ]
 
 const contacts = [
-    { icon: '📍', title: 'НАШ АДРЕС',     lines: ['Остров Крит, Греция'] },
+    { icon: '📍', title: 'НАШ АДРЕС',     lines: [' Верия, Северная Греция'] },
     { icon: '🕐', title: 'ВРЕМЯ РАБОТЫ',  lines: ['ПН-СБ: 9:00 - 18:00', 'ВС: выходной'] },
-    { icon: '📞', title: 'СВЯЗЬ',         lines: ['Skype: sinnefaki2', '(Zoia Pavlovski)', 'Viber/Telegram/WhatsApp:', '+306982104110'] },
+    { icon: '📞', title: 'СВЯЗЬ',         lines: [ 'Viber/Telegram/WhatsApp:', '+306982104110'] },
     { icon: '✉️', title: 'НАПИШИТЕ НАМ', lines: ['info@zoegreek.eu', 'zoepavlovska@gmail.com'] },
 ]
 
